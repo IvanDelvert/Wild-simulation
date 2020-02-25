@@ -1,6 +1,7 @@
 #ifndef ANIMAL_H
 #define ANIMAL_H
 
+class MainWindow;
 
 class Animal {
 
@@ -18,6 +19,7 @@ class Animal {
 
         void setPos(int x, int y);
 
+       friend class MainWindow;
 
 };
 

@@ -16,8 +16,10 @@ class MainWindow : public QWidget {
     Q_OBJECT
 
 
+
     public:
         MainWindow(QWidget *parent = 0);
+
 
     public slots:
         void clickInitParameters();
@@ -29,9 +31,6 @@ class MainWindow : public QWidget {
 
 
     private:
-
-        int WIDTH = 1600;
-        int HIGHT = 800;
 
 
         QImage rabbitImage;
@@ -45,6 +44,10 @@ class MainWindow : public QWidget {
         QFormLayout *formLayout;
         QHBoxLayout *boutonLayout;
 
+        int WIDTH = 1600;
+        int HIGHT = 800;
+
+
         int numberRabbit;
         int numberWolf;
 
@@ -56,6 +59,7 @@ class MainWindow : public QWidget {
         void initParameterWindow();
         void clearLayout(QLayout *layout);
         void initWildPos();
+
 
 };
 
