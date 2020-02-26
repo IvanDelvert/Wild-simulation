@@ -113,7 +113,7 @@ void MainWindow::clickInitParameters(){
 
    initWildPos();
    startSimulation = true;
-
+   timerID = startTimer(100);
 
    qInfo()<<"Rabbit "<<numberRabbit<<"Wolf: "<<numberWolf<<endl;
 
@@ -126,10 +126,15 @@ void MainWindow::initWildPos(){
         Rabbit r;
         r.setPos((QRandomGenerator::global()->bounded(240))*5,(QRandomGenerator::global()->bounded(160))*5);
         wild.append(r);
-
     }
+}
 
+void MainWindow::moveWild(){
 
+    // TODO CHANGE THAT
+    for(int i=0;i<numberRabbit;i++){
+        wild[i].moveAnimal(WIDTH,HIGHT,5);
+    }
 }
 
 
@@ -155,6 +160,11 @@ void MainWindow::paintEvent(QPaintEvent *e){
 }
 
 void MainWindow::timerEvent(QTimerEvent *e){
+
+    Q_UNUSED(e);
+
+    moveWild();
+    repaint();
 
 
 }
