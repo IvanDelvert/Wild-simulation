@@ -47,6 +47,7 @@ class MainWindow : public QWidget {
         int WIDTH = 1600;
         int HIGHT = 800;
 
+        int timerID;
 
         int numberRabbit;
         int numberWolf;
@@ -59,6 +60,7 @@ class MainWindow : public QWidget {
         void initParameterWindow();
         void clearLayout(QLayout *layout);
         void initWildPos();
+        void moveWild();
 
 
 };

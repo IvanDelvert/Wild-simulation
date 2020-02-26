@@ -1,6 +1,7 @@
 #include "Animal.h"
 #include "MainWindow.h"
 #include <QRandomGenerator>
+#include <QDebug>
 
 Animal::Animal(){
 
@@ -49,26 +50,124 @@ int Animal::getScenarioPos(int width, int hight,int imageSize){
     return res;
 }
 
+
 void Animal::moveAnimal(int width, int hight,int imageSize){
     int scenario = this->getScenarioPos(width, hight,imageSize);
-
+    int i;
     switch (scenario)
-        {
+    {
 
-        case 1:
+    case 0:
+        i = QRandomGenerator::global()->bounded(4);
+        if(i == 1){
+            X_pos += imageSize;
+        }
 
-            break;
-        case 2:
+        else if(i == 2){
+            X_pos -= imageSize;
+        }
 
-            break;
-        case 3:
+        else if(i == 3){
+            Y_pos -= imageSize;
+        }
 
-            break;
+        else{Y_pos += imageSize;}
 
+        break;
+
+    case 1:
+        i = QRandomGenerator::global()->bounded(2);
+        if(i == 1){
+            X_pos += imageSize;
+        }
+
+        else{Y_pos += imageSize;}
+
+        break;
+    case 2:
+        i = QRandomGenerator::global()->bounded(2);
+        if(i == 1){
+            X_pos -= imageSize;
+        }
+
+        else{Y_pos += imageSize;}
+
+        break;
+    case 3:
+        i = QRandomGenerator::global()->bounded(2);
+        if(i == 1){
+            X_pos -= imageSize;
+        }
+
+        else{Y_pos -= imageSize;}
+
+        break;
+    case 4:
+        i = QRandomGenerator::global()->bounded(2);
+        if(i == 1){
+            X_pos += imageSize;
+        }
+
+        else{Y_pos -= imageSize;}
+        break;
+
+    case 5:
+        i = QRandomGenerator::global()->bounded(3);
+        if(i == 1){
+            X_pos += imageSize;
+        }
+
+        else if(i == 2){
+            X_pos -= imageSize;
+        }
+
+        else{Y_pos -= imageSize;}
+
+        break;
+
+    case 6:
+        i = QRandomGenerator::global()->bounded(3);
+        if(i == 1){
+            Y_pos += imageSize;
+        }
+
+        else if(i == 2){
+            Y_pos -= imageSize;
+        }
+
+        else{X_pos -= imageSize;}
+
+        break;
+
+
+    case 7:
+        i = QRandomGenerator::global()->bounded(3);
+        if(i == 1){
+            X_pos += imageSize;
+        }
+
+        else if(i == 2){
+            X_pos -= imageSize;
+        }
+
+        else{Y_pos -= imageSize;}
+
+        break;
+
+    case 8:
+        i = QRandomGenerator::global()->bounded(3);
+        if(i == 1){
+            Y_pos += imageSize;
+        }
+
+        else if(i == 2){
+            Y_pos -= imageSize;
+        }
+
+        else{X_pos += imageSize;}
+
+        break;
     }
-
-
-
 }
 
 

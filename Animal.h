@@ -18,8 +18,9 @@ class Animal {
         Animal();
 
         void setPos(int x, int y);
+        int getScenarioPos(int width, int hight,int imageSize);
+        void moveAnimal(int width, int hight,int imageSize);
 
-       friend class MainWindow;
 
 };
 
