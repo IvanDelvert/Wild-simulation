@@ -121,7 +121,7 @@ void Animal::moveAnimal(int width, int hight,int imageSize){
             X_pos -= imageSize;
         }
 
-        else{Y_pos -= imageSize;}
+        else{Y_pos += imageSize;}
 
         break;
 
@@ -170,12 +170,26 @@ void Animal::moveAnimal(int width, int hight,int imageSize){
     }
 }
 
+void Animal::setAnimalImage(QImage i){
+    this->animalImage = i;
+}
+
 
 Rabbit::Rabbit() : Animal(){
     alive = true;
     age = 0;
     angry = 0;
     sexualMatuity = 10;
+
 }
+
+Wolf::Wolf() : Animal(){
+    alive = true;
+    age = 0;
+    angry = 0;
+    sexualMatuity = 100;
+
+}
+
 
 

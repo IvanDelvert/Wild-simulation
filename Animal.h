@@ -1,6 +1,7 @@
 #ifndef ANIMAL_H
 #define ANIMAL_H
 
+#include<QImage>
 class MainWindow;
 
 class Animal {
@@ -12,7 +13,7 @@ class Animal {
         int Y_pos;
         int angry;
         int sexualMatuity;
-
+        QImage animalImage;
         bool alive;
 
         Animal();
@@ -20,6 +21,7 @@ class Animal {
         void setPos(int x, int y);
         int getScenarioPos(int width, int hight,int imageSize);
         void moveAnimal(int width, int hight,int imageSize);
+        void setAnimalImage(QImage i);
 
 
 };
@@ -30,7 +32,17 @@ class Rabbit : public Animal{
 
         Rabbit();
 
+
 };
+
+class Wolf : public Animal{
+
+    public:
+
+        Wolf();
+
+};
+
 
 
 #endif // ANIMAL_H

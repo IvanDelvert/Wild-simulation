@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+ #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #pragma once
@@ -54,7 +54,7 @@ class MainWindow : public QWidget {
 
         bool startSimulation;
 
-        QVector<Rabbit> wild;
+        QVector<Animal> wild;
 
         void loadImage();
         void initParameterWindow();

@@ -26,8 +26,6 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent){
 
     qInfo()<<numberRabbit<<endl;
 
-
-
 }
 
 
@@ -43,7 +41,6 @@ void MainWindow::loadImage(){
 
 
 void MainWindow::initParameterWindow(){
-
 
          numberOfRabbit = new QSpinBox;
          numberOfWolf = new QSpinBox;
@@ -104,7 +101,7 @@ void MainWindow::clickInitParameters(){
 
     numberRabbit = numberOfRabbit->value();
     numberWolf = numberOfWolf->value();
-
+    int t = timerEdit->value();
     clearLayout(formLayout);
     clearLayout(boutonLayout);
 
@@ -113,31 +110,47 @@ void MainWindow::clickInitParameters(){
 
    initWildPos();
    startSimulation = true;
-   timerID = startTimer(100);
+   timerID = startTimer(t);
 
    qInfo()<<"Rabbit "<<numberRabbit<<"Wolf: "<<numberWolf<<endl;
 
 
 }
 
+//TODO improve this method
+//TODO Change name method
+//IDEA May be the QImage by animal is not a not idea?
 void MainWindow::initWildPos(){
-
     for(int i=0;i<numberRabbit;i++){
         Rabbit r;
         r.setPos((QRandomGenerator::global()->bounded(240))*5,(QRandomGenerator::global()->bounded(160))*5);
+        r.setAnimalImage(rabbitImage);
         wild.append(r);
     }
+
+    for(int i=0;i<numberWolf;i++){
+        Wolf w;
+        w.setPos((QRandomGenerator::global()->bounded(240))*5,(QRandomGenerator::global()->bounded(160))*5);
+        w.setAnimalImage(wolfImage);
+        wild.append(w);
+    }
+
+
 }
 
 void MainWindow::moveWild(){
 
-    // TODO CHANGE THAT
-    for(int i=0;i<numberRabbit;i++){
-        wild[i].moveAnimal(WIDTH,HIGHT,5);
+    int n = wild.size();
+    for(int i=0;i<n;i++){
+        wild[i].moveAnimal(WIDTH-400,HIGHT,5);
     }
 }
 
 
+/*
+ *
+ *
+ * */
 void MainWindow::paintEvent(QPaintEvent *e){
 
     Q_UNUSED(e);
@@ -150,14 +163,17 @@ void MainWindow::paintEvent(QPaintEvent *e){
     if(startSimulation){
 
         qp.drawLine(1200,0,1200,800);
-        for(int i=0;i<numberRabbit;i++){
-            qp.drawImage(wild[i].X_pos,wild[i].Y_pos,rabbitImage);
+        int n = wild.size();
+        for(int i=0;i<n;i++){
+            qp.drawImage(wild[i].X_pos,wild[i].Y_pos,wild[i].animalImage);
         }
-
-        //qp.drawImage(10,10,rabbitImage);
     }
-
 }
+
+/*
+ * Loop for the modelization of the population dynamics
+ *
+ * */
 
 void MainWindow::timerEvent(QTimerEvent *e){
 
