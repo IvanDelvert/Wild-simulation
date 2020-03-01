@@ -120,35 +120,76 @@ void MainWindow::clickInitParameters(){
 //TODO improve this method
 //TODO Change name method
 //IDEA May be the QImage by animal is not a not idea?
+/*
+ *
+ *
+ *
+ * */
+
 void MainWindow::initWildPos(){
     for(int i=0;i<numberRabbit;i++){
         Rabbit r;
         r.setPos((QRandomGenerator::global()->bounded(240))*5,(QRandomGenerator::global()->bounded(160))*5);
         r.setAnimalImage(rabbitImage);
-        wild.append(r);
+        rabbitWild.push_back(r);
     }
 
     for(int i=0;i<numberWolf;i++){
         Wolf w;
         w.setPos((QRandomGenerator::global()->bounded(240))*5,(QRandomGenerator::global()->bounded(160))*5);
         w.setAnimalImage(wolfImage);
-        wild.append(w);
+        wolfWild.push_back(w);
     }
 
 
 }
 
-void MainWindow::moveWild(){
+/*
+ * Method that add age for each animals and erase dead animals from differents lists
+ *
+ * */
 
-    int n = wild.size();
+void MainWindow::eraseDeadAnimal(){
+    for(int i=0;i<rabbitWild.size();i++){
+        if(rabbitWild[i].age > 100){
+            rabbitWild.erase(rabbitWild.begin()+i);
+        }
+        else{
+            rabbitWild[i].age++;
+        }
+    }   
+    for(int i=0;i<wolfWild.size();i++){
+        if(wolfWild[i].age > 150){
+            wolfWild.erase(wolfWild.begin()+i);
+        }
+        else{
+            wolfWild[i].age++;
+        }
+    }
+}
+
+
+
+
+/*
+ * Calculation of the new position of the wolfs and the rabbits
+ *
+ * */
+void MainWindow::moveWild(){
+    int n = rabbitWild.size();
     for(int i=0;i<n;i++){
-        wild[i].moveAnimal(WIDTH-400,HIGHT,5);
+        rabbitWild[i].moveAnimal(WIDTH-400,HIGHT,5);
+    }
+
+    int r = wolfWild.size();
+    for(int i=0;i<r;i++){
+        wolfWild[i].moveAnimal(WIDTH-400,HIGHT,5);
     }
 }
 
 
 /*
- *
+ * Event that perform the display of each species
  *
  * */
 void MainWindow::paintEvent(QPaintEvent *e){
@@ -163,15 +204,19 @@ void MainWindow::paintEvent(QPaintEvent *e){
     if(startSimulation){
 
         qp.drawLine(1200,0,1200,800);
-        int n = wild.size();
+        int n = rabbitWild.size();
         for(int i=0;i<n;i++){
-            qp.drawImage(wild[i].X_pos,wild[i].Y_pos,wild[i].animalImage);
+            qp.drawImage(rabbitWild[i].X_pos,rabbitWild[i].Y_pos,rabbitWild[i].animalImage);
+        }
+        int r = wolfWild.size();
+        for(int i=0;i<r;i++){
+            qp.drawImage(wolfWild[i].X_pos,wolfWild[i].Y_pos,wolfWild[i].animalImage);
         }
     }
 }
 
 /*
- * Loop for the modelization of the population dynamics
+ * Main loop for the simulation
  *
  * */
 
@@ -179,6 +224,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
 
     Q_UNUSED(e);
 
+    eraseDeadAnimal();
     moveWild();
     repaint();
 

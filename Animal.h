@@ -24,6 +24,7 @@ class Animal {
         void setAnimalImage(QImage i);
 
 
+
 };
 
 class Rabbit : public Animal{

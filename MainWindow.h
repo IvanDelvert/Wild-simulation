@@ -54,13 +54,15 @@ class MainWindow : public QWidget {
 
         bool startSimulation;
 
-        QVector<Animal> wild;
+        QVector<Rabbit> rabbitWild;
+        QVector<Wolf> wolfWild;
 
         void loadImage();
         void initParameterWindow();
         void clearLayout(QLayout *layout);
         void initWildPos();
         void moveWild();
+        void eraseDeadAnimal();
 
 
 };

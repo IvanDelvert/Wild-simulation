@@ -180,7 +180,6 @@ Rabbit::Rabbit() : Animal(){
     age = 0;
     angry = 0;
     sexualMatuity = 10;
-
 }
 
 Wolf::Wolf() : Animal(){
@@ -188,7 +187,6 @@ Wolf::Wolf() : Animal(){
     age = 0;
     angry = 0;
     sexualMatuity = 100;
-
 }
 
 
