@@ -11,6 +11,8 @@
 #include <QFormLayout>
 #include "Animal.h"
 
+
+
 class MainWindow : public QWidget {
 
     Q_OBJECT
@@ -20,6 +22,8 @@ class MainWindow : public QWidget {
     public:
         MainWindow(QWidget *parent = 0);
 
+        static const int WIDTH = 1600;
+        static const int HIGHT = 800;
 
     public slots:
         void clickInitParameters();
@@ -44,8 +48,7 @@ class MainWindow : public QWidget {
         QFormLayout *formLayout;
         QHBoxLayout *boutonLayout;
 
-        int WIDTH = 1600;
-        int HIGHT = 800;
+
 
         int timerID;
 
@@ -57,13 +60,15 @@ class MainWindow : public QWidget {
         QVector<Rabbit> rabbitWild;
         QVector<Wolf> wolfWild;
 
+
         void loadImage();
         void initParameterWindow();
         void clearLayout(QLayout *layout);
         void initWildPos();
         void moveWild();
-        void eraseDeadAnimal();
+        void eraseOldAnimal();
         void checkCollission();
+        bool isOutside(int xAnimal, int yAnimal,int xlimit,int ylimit);
 
 
 };

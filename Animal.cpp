@@ -3,6 +3,8 @@
 #include <QRandomGenerator>
 #include <QDebug>
 
+
+
 Animal::Animal(){
 
 }
@@ -179,8 +181,8 @@ Rabbit::Rabbit() : Animal(){
     alive = true;
     age = 0;
     angry = 0;
-    sexualMatuity = 10;
-    lifeExpectancy = QRandomGenerator::global()->bounded(100,151);
+    sexualMatuity = 300;
+    lifeExpectancy = QRandomGenerator::global()->bounded(1000,1510);
 }
 
 Wolf::Wolf() : Animal(){
@@ -188,7 +190,7 @@ Wolf::Wolf() : Animal(){
     age = 0;
     angry = 0;
     sexualMatuity = 100;
-    lifeExpectancy = QRandomGenerator::global()->bounded(200,250);
+    lifeExpectancy = QRandomGenerator::global()->bounded(2000,2500);
 }
 
 

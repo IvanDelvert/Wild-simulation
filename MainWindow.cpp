@@ -13,11 +13,13 @@
 #include "Animal.h"
 
 
+int collissionMatrix[160][240] = {0};
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent){
 
     setFixedSize(WIDTH,HIGHT);
     startSimulation = false;
+
 
     initParameterWindow();
 
@@ -111,7 +113,6 @@ void MainWindow::clickInitParameters(){
    initWildPos();
    startSimulation = true;
    timerID = startTimer(t);
-
    qInfo()<<"Rabbit "<<numberRabbit<<"Wolf: "<<numberWolf<<endl;
 
 
@@ -129,14 +130,21 @@ void MainWindow::clickInitParameters(){
 void MainWindow::initWildPos(){
     for(int i=0;i<numberRabbit;i++){
         Rabbit r;
-        r.setPos((QRandomGenerator::global()->bounded(240))*5,(QRandomGenerator::global()->bounded(160))*5);
+        int xRandRabbit = QRandomGenerator::global()->bounded(240);
+        int yRandRabbit = QRandomGenerator::global()->bounded(160);
+        //check
+        collissionMatrix[yRandRabbit][xRandRabbit] += 1;
+        r.setPos(xRandRabbit*5,yRandRabbit*5);
         r.setAnimalImage(rabbitImage);
         rabbitWild.push_back(r);
     }
 
     for(int i=0;i<numberWolf;i++){
         Wolf w;
-        w.setPos((QRandomGenerator::global()->bounded(240))*5,(QRandomGenerator::global()->bounded(160))*5);
+        int xRandWolf = QRandomGenerator::global()->bounded(240);
+        int yRandWolf = QRandomGenerator::global()->bounded(160);
+        collissionMatrix[yRandWolf][xRandWolf] += 1;
+        w.setPos(xRandWolf*5,yRandWolf*5);
         w.setAnimalImage(wolfImage);
         wolfWild.push_back(w);
     }
@@ -149,7 +157,7 @@ void MainWindow::initWildPos(){
  *
  * */
 
-void MainWindow::eraseDeadAnimal(){
+void MainWindow::eraseOldAnimal(){
     for(int i=0;i<rabbitWild.size();i++){
         if(rabbitWild[i].age > rabbitWild[i].lifeExpectancy){
             rabbitWild.erase(rabbitWild.begin()+i);
@@ -179,6 +187,14 @@ void MainWindow::checkCollission(){
 }
 
 
+bool MainWindow::isOutside(int xAnimal, int yAnimal,int xLimit,int yLimit){
+    bool res= false;
+    if(xAnimal < 0 || yAnimal < 0 || xAnimal >= xLimit || yAnimal >= yLimit){
+        res = true;
+    }
+
+    return res;
+}
 
 
 /*
@@ -188,7 +204,16 @@ void MainWindow::checkCollission(){
 void MainWindow::moveWild(){
     int n = rabbitWild.size();
     for(int i=0;i<n;i++){
+        collissionMatrix[(rabbitWild[i].Y_pos)/5][(rabbitWild[i].X_pos)/5] -= 1;
         rabbitWild[i].moveAnimal(WIDTH-400,HIGHT,5);
+        collissionMatrix[(rabbitWild[i].Y_pos)/5][(rabbitWild[i].X_pos)/5] += 1;
+
+        if(collissionMatrix[(rabbitWild[i].Y_pos)/5][(rabbitWild[i].X_pos)/5] >1){
+            Rabbit r;
+            r.setPos((QRandomGenerator::global()->bounded(240))*5,(QRandomGenerator::global()->bounded(160))*5);
+            rabbitWild.push_back(r);
+            qInfo()<<"Birth"<<endl;
+        }
     }
 
     int r = wolfWild.size();
@@ -234,7 +259,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
 
     Q_UNUSED(e);
 
-    eraseDeadAnimal();
+    eraseOldAnimal();
     moveWild();
     repaint();
 
