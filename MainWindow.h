@@ -63,6 +63,7 @@ class MainWindow : public QWidget {
         void initWildPos();
         void moveWild();
         void eraseDeadAnimal();
+        void checkCollission();
 
 
 };

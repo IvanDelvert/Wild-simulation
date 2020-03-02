@@ -151,7 +151,7 @@ void MainWindow::initWildPos(){
 
 void MainWindow::eraseDeadAnimal(){
     for(int i=0;i<rabbitWild.size();i++){
-        if(rabbitWild[i].age > 100){
+        if(rabbitWild[i].age > rabbitWild[i].lifeExpectancy){
             rabbitWild.erase(rabbitWild.begin()+i);
         }
         else{
@@ -159,13 +159,23 @@ void MainWindow::eraseDeadAnimal(){
         }
     }   
     for(int i=0;i<wolfWild.size();i++){
-        if(wolfWild[i].age > 150){
+        if(wolfWild[i].age > wolfWild[i].lifeExpectancy){
             wolfWild.erase(wolfWild.begin()+i);
         }
         else{
             wolfWild[i].age++;
         }
     }
+}
+
+
+/*
+ *
+ * TODO MATRIX method
+ *
+ * */
+void MainWindow::checkCollission(){
+
 }
 
 
