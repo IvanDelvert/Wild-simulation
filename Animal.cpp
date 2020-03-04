@@ -179,6 +179,7 @@ void Animal::setAnimalImage(QImage i){
 
 Rabbit::Rabbit() : Animal(){
     alive = true;
+    type = 0;
     age = 0;
     angry = 0;
     sexualMatuity = 300;
@@ -186,6 +187,7 @@ Rabbit::Rabbit() : Animal(){
 }
 
 Wolf::Wolf() : Animal(){
+    type =1;
     alive = true;
     age = 0;
     angry = 0;

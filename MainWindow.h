@@ -69,6 +69,8 @@ class MainWindow : public QWidget {
         void eraseOldAnimal();
         void checkCollission();
         bool isOutside(int xAnimal, int yAnimal,int xlimit,int ylimit);
+        bool isOnlyRabbit();
+        void manageCollision();
 
 
 };

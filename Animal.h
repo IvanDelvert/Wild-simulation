@@ -14,6 +14,7 @@ class Animal {
         int angry;
         int sexualMatuity;
         int lifeExpectancy;
+        int type;
         QImage animalImage;
         bool alive;
 
