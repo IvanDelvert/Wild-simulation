@@ -234,7 +234,7 @@ void MainWindow::manageCollision(){
                     mapMatrix[i][j].clear();
                 }
                 else{
-                    qInfo()<<"SIZE >2"<<endl;
+                   // qInfo()<<"SIZE >2"<<endl;
                     QVector<Animal>::iterator it;
                      onlyRabbit = true;
                     for(it = mapMatrix[i][j].begin();it != mapMatrix[i][j].end();it++){
@@ -242,13 +242,14 @@ void MainWindow::manageCollision(){
                             onlyRabbit = false;
                             break;
                         }
-                        qInfo()<<"FOR: "<<onlyRabbit<<endl;
-                        mapMatrix[i][j].clear();
+                       // qInfo()<<"FOR: "<<onlyRabbit<<endl;
+
                     }
-                            qInfo()<<"FOR 2: "<<onlyRabbit<<endl;
+                           // qInfo()<<"FOR 2: "<<onlyRabbit<<endl;
                     if(onlyRabbit ){
-                        qInfo()<<"BIRTH"<<endl;
+
                         int A = (mapMatrix[i][j].size())/2;
+                       // qInfo()<<"BIRTH: "<< A<<endl;
                         for(int k=1;k<=A;k++){
                             Rabbit r;
                             int xRandRabbit = QRandomGenerator::global()->bounded(240);
@@ -256,7 +257,9 @@ void MainWindow::manageCollision(){
                             r.setPos(xRandRabbit*5,yRandRabbit*5);
                             r.setAnimalImage(rabbitImage);
                             rabbitWild.push_back(r);
+                            mapMatrix[i][j].clear();
                         }
+                        mapMatrix[i][j].clear();
 
                     }
 
@@ -306,6 +309,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
     moveWild();
     manageCollision();
     repaint();
+    qInfo()<<rabbitWild.size()<<endl;
 
 
 }
