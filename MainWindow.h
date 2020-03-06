@@ -1,4 +1,4 @@
- #ifndef MAINWINDOW_H
+#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #pragma once
@@ -69,8 +69,9 @@ class MainWindow : public QWidget {
         void eraseOldAnimal();
         void checkCollission();
         bool isOutside(int xAnimal, int yAnimal,int xlimit,int ylimit);
-        bool isOnlyRabbit();
         void manageCollision();
+        void rabbitReproduction(int n);
+        int scenarioCollision();
 
 
 };

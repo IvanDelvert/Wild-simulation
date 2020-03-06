@@ -159,7 +159,7 @@ void MainWindow::initWildPos(){
  * Method that add age for each animals and erase dead animals from differents lists
  *
  * */
-/*
+
 void MainWindow::eraseOldAnimal(){
     for(int i=0;i<rabbitWild.size();i++){
         if(rabbitWild[i].age > rabbitWild[i].lifeExpectancy){
@@ -178,7 +178,7 @@ void MainWindow::eraseOldAnimal(){
         }
     }
 }
-*/
+
 
 /*
  *
@@ -220,9 +220,17 @@ void MainWindow::moveWild(){
 
 }
 
-bool MainWindow::isOnlyRabbit(){
-
+void MainWindow::rabbitReproduction(int n){
+    for(int k=1;k<=n;k++){
+        Rabbit r;
+        int xRandRabbit = QRandomGenerator::global()->bounded(240);
+        int yRandRabbit = QRandomGenerator::global()->bounded(160);
+        r.setPos(xRandRabbit*5,yRandRabbit*5);
+        r.setAnimalImage(rabbitImage);
+        rabbitWild.push_back(r);
+    }
 }
+
 
 
 void MainWindow::manageCollision(){
@@ -234,7 +242,6 @@ void MainWindow::manageCollision(){
                     mapMatrix[i][j].clear();
                 }
                 else{
-                   // qInfo()<<"SIZE >2"<<endl;
                     QVector<Animal>::iterator it;
                      onlyRabbit = true;
                     for(it = mapMatrix[i][j].begin();it != mapMatrix[i][j].end();it++){
@@ -242,26 +249,14 @@ void MainWindow::manageCollision(){
                             onlyRabbit = false;
                             break;
                         }
-                       // qInfo()<<"FOR: "<<onlyRabbit<<endl;
-
                     }
-                           // qInfo()<<"FOR 2: "<<onlyRabbit<<endl;
-                    if(onlyRabbit ){
-
+                    //Case just Rabbit
+                    if(onlyRabbit){
                         int A = (mapMatrix[i][j].size())/2;
-                       // qInfo()<<"BIRTH: "<< A<<endl;
-                        for(int k=1;k<=A;k++){
-                            Rabbit r;
-                            int xRandRabbit = QRandomGenerator::global()->bounded(240);
-                            int yRandRabbit = QRandomGenerator::global()->bounded(160);
-                            r.setPos(xRandRabbit*5,yRandRabbit*5);
-                            r.setAnimalImage(rabbitImage);
-                            rabbitWild.push_back(r);
-                            mapMatrix[i][j].clear();
-                        }
+                        rabbitReproduction(A);
                         mapMatrix[i][j].clear();
-
                     }
+
 
                }
             }
@@ -305,10 +300,12 @@ void MainWindow::timerEvent(QTimerEvent *e){
 
     Q_UNUSED(e);
 
-    //eraseOldAnimal();
+    eraseOldAnimal();
     moveWild();
     manageCollision();
     repaint();
+
+    if(rabbitWild.size() > 500000){killTimer(timerID);}
     qInfo()<<rabbitWild.size()<<endl;
 
 
