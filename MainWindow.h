@@ -71,7 +71,9 @@ class MainWindow : public QWidget {
         bool isOutside(int xAnimal, int yAnimal,int xlimit,int ylimit);
         void manageCollision();
         void rabbitReproduction(int n);
-        int scenarioCollision();
+        void wolfReproduction(int n);
+        void wolfEatRabbit(QVector<Animal> w);
+        int scenarioCollision(QVector<Animal> w);
 
 
 };
