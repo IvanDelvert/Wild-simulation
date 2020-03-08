@@ -253,6 +253,29 @@ void MainWindow::wolfEatRabbit(QVector<Animal> w){
         if(it->type ==0){rabbit++;}
         else{wolf++;}
     }
+
+    QVector<Rabbit>::iterator itt;
+    int numberOfKill = qMin(rabbit,wolf);
+    int i=1;
+    while(i<=numberOfKill){
+        for(it = w.begin();it != w.end();it++){
+            if(it->type == 0){
+                for(itt = rabbitWild.begin();itt != rabbitWild.end();){
+                    if(itt->X_pos == it->X_pos && itt->Y_pos == it->Y_pos){
+                        itt = rabbitWild.erase(rabbitWild.begin()+std::distance(rabbitWild.begin(),itt));
+                        i++;
+                    }
+                    else{
+                        itt++;
+                    }
+                }
+
+            }
+        }
+    }
+
+
+    /*
     //TODO improve
     QVector<Rabbit>::iterator itt;
     int numberOfKill = qMin(rabbit,wolf);
@@ -262,12 +285,14 @@ void MainWindow::wolfEatRabbit(QVector<Animal> w){
             for(itt = rabbitWild.begin();itt != rabbitWild.end();itt++){
                 //qInfo()<<"test00"<<endl;
                 if(itt->X_pos == it->X_pos && itt->Y_pos == it->Y_pos){
-                    qInfo()<<"test"<<endl;
+                    qInfo()<<"before erase"<<endl;
                     rabbitWild.erase(rabbitWild.begin()+std::distance(rabbitWild.begin(),itt));
+                    qInfo()<<"after erase"<<endl;
                 }
             }
         }
     }
+    */
 
 }
 
@@ -320,7 +345,9 @@ void MainWindow::manageCollision(){
                     }
 
                     else{
+                        qInfo()<<"Before eat rabbit"<<endl;
                         wolfEatRabbit(mapMatrix[i][j]);
+                        qInfo()<<"After eat rabbit"<<endl;
                         mapMatrix[i][j].clear();
                     }
 
@@ -373,7 +400,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
     repaint();
 
     if(rabbitWild.size() + wolfWild.size() > 500000){killTimer(timerID);}
-    qInfo()<<wolfWild.size()<<endl;
+    qInfo()<<rabbitWild.size()<<endl;
 
 
 }
