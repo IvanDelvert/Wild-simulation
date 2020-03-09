@@ -16,19 +16,15 @@
 
 QVector <Animal> mapMatrix[160][240];
 
+/*
+ * Builder of the main window
+ * */
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent){
 
     setFixedSize(WIDTH,HIGHT);
     startSimulation = false;
-
-
     initParameterWindow();
-
-
     loadImage();
-
-    qInfo()<<numberRabbit<<endl;
-
 }
 
 
@@ -45,9 +41,9 @@ void MainWindow::loadImage(){
 
 void MainWindow::initParameterWindow(){
 
-         numberOfRabbit = new QSpinBox;
-         numberOfWolf = new QSpinBox;
-         timerEdit = new QSpinBox;
+        numberOfRabbit = new QSpinBox;
+        numberOfWolf = new QSpinBox;
+        timerEdit = new QSpinBox;
 
         numberOfRabbit->setRange(0,30000);
         numberOfWolf->setRange(0,30000);
@@ -75,14 +71,14 @@ void MainWindow::initParameterWindow(){
         mainLayout->addLayout(formLayout);
         mainLayout->addLayout(boutonLayout);
 
-
-
         this->setLayout(mainLayout);
 
 }
 
 
-
+/*
+ * Delete the layout that initialize the parameters for the simulation
+ * */
 void MainWindow::clearLayout(QLayout *layout){
     QLayoutItem *item;
     while((item = layout->takeAt(0))) {
@@ -97,9 +93,9 @@ void MainWindow::clearLayout(QLayout *layout){
     }
 }
 
-
-
-
+/*
+ * SLOT after the click on the "OK" button. Initialisation of the number of species
+ * */
 void MainWindow::clickInitParameters(){
 
     numberRabbit = numberOfRabbit->value();
@@ -127,19 +123,14 @@ void MainWindow::clickInitParameters(){
  *
  *
  * */
-
 void MainWindow::initWildPos(){
     for(int i=0;i<numberRabbit;i++){
         Rabbit r;
         int xRandRabbit = QRandomGenerator::global()->bounded(240);
         int yRandRabbit = QRandomGenerator::global()->bounded(160);
-
-
-
         r.setPos(xRandRabbit*5,yRandRabbit*5);
         r.setAnimalImage(rabbitImage);
         rabbitWild.push_back(r);
-
     }
 
 
@@ -157,9 +148,7 @@ void MainWindow::initWildPos(){
 
 /*
  * Method that add age for each animals and erase dead animals from differents lists
- *
  * */
-
 void MainWindow::eraseOldAnimal(){
     for(int i=0;i<rabbitWild.size();i++){
         if(rabbitWild[i].age > rabbitWild[i].lifeExpectancy){
@@ -180,25 +169,6 @@ void MainWindow::eraseOldAnimal(){
 }
 
 
-/*
- *
- * TODO MATRIX method
- *
- * */
-void MainWindow::checkCollission(){
-
-}
-
-
-bool MainWindow::isOutside(int xAnimal, int yAnimal,int xLimit,int yLimit){
-    bool res= false;
-    if(xAnimal < 0 || yAnimal < 0 || xAnimal >= xLimit || yAnimal >= yLimit){
-        res = true;
-    }
-
-    return res;
-}
-
 
 /*
  * Calculation of the new position of the wolfs and the rabbits
@@ -218,9 +188,12 @@ void MainWindow::moveWild(){
         wolfWild[i].moveAnimal(WIDTH-400,HIGHT,5);
         mapMatrix[(wolfWild[i].Y_pos)/5][(wolfWild[i].X_pos)/5].push_back(wolfWild[i]);
     }
-
 }
 
+/*
+ * Creattion of 'n' new rabbit
+ *
+ * */
 void MainWindow::rabbitReproduction(int n){
     for(int k=1;k<=n;k++){
         Rabbit r;
@@ -232,6 +205,10 @@ void MainWindow::rabbitReproduction(int n){
     }
 }
 
+/*
+ * Creattion of 'n' new wolf
+ *
+ * */
 void MainWindow::wolfReproduction(int n){
     for(int k=1;k<=n;k++){
         Wolf w;
@@ -244,6 +221,12 @@ void MainWindow::wolfReproduction(int n){
 
 }
 
+
+/*
+ * In a list w of animals (rabbit + wolf), check the number of rabbit to remove
+ * Remove this number of rabbit from 'rabbitWild' vector
+ *
+ * */
 void MainWindow::wolfEatRabbit(QVector<Animal> w){
     int wolf =0;
     int rabbit =0;
@@ -256,6 +239,7 @@ void MainWindow::wolfEatRabbit(QVector<Animal> w){
 
     QVector<Rabbit>::iterator itt;
     int numberOfKill = qMin(rabbit,wolf);
+    if(numberOfKill > 1){qInfo()<<"Number of kill: "<<numberOfKill<<endl;}
     int i=1;
     while(i<=numberOfKill){
         for(it = w.begin();it != w.end();it++){
@@ -274,28 +258,14 @@ void MainWindow::wolfEatRabbit(QVector<Animal> w){
         }
     }
 
-
-    /*
-    //TODO improve
-    QVector<Rabbit>::iterator itt;
-    int numberOfKill = qMin(rabbit,wolf);
-    for(it = w.begin();it != w.end();it++){
-        if(currentKill <= numberOfKill && it->type ==0){
-           currentKill++;
-            for(itt = rabbitWild.begin();itt != rabbitWild.end();itt++){
-                //qInfo()<<"test00"<<endl;
-                if(itt->X_pos == it->X_pos && itt->Y_pos == it->Y_pos){
-                    qInfo()<<"before erase"<<endl;
-                    rabbitWild.erase(rabbitWild.begin()+std::distance(rabbitWild.begin(),itt));
-                    qInfo()<<"after erase"<<endl;
-                }
-            }
-        }
-    }
-    */
-
 }
 
+/*
+ * Determination of the type of collision:
+ *  return 0 ---> Collision between rabbits
+ *  return 1 ---> Collision between wolfs
+ *  return 2 ---> Collision between rabbits and wolfs
+ * */
 int MainWindow::scenarioCollision(QVector<Animal> w){
     int count =0;
      QVector<Animal>::iterator it;
@@ -308,9 +278,10 @@ int MainWindow::scenarioCollision(QVector<Animal> w){
 }
 
 
-
-
-
+/*
+* Manage the collision thanks to the 'matrixMap'
+*
+ * */
 void MainWindow::manageCollision(){
     bool onlyRabbit;
     for(int i=0;i<160;i++){
@@ -320,39 +291,30 @@ void MainWindow::manageCollision(){
                     mapMatrix[i][j].clear();
                 }
                 else{
-                    /*
-                    QVector<Animal>::iterator it;
-                     onlyRabbit = true;
-                    for(it = mapMatrix[i][j].begin();it != mapMatrix[i][j].end();it++){
-                        if(it->type ==1){
-                            onlyRabbit = false;
-                            break;
-                        }
-                    }
-                    */
+
                     int cas = scenarioCollision(mapMatrix[i][j]);
                     //Case just Rabbit
                     if(cas == 0){
-                       // qInfo()<<"work"<<endl;
+                        // qInfo()<<"work"<<endl;
                         int A = (mapMatrix[i][j].size())/2;
                         rabbitReproduction(A);
                         mapMatrix[i][j].clear();
                     }
                     else if(cas == 1){
-                       int A = (mapMatrix[i][j].size())/2;
-                       wolfReproduction(A);
-                       mapMatrix[i][j].clear();
+                        int A = (mapMatrix[i][j].size())/2;
+                        wolfReproduction(A);
+                        mapMatrix[i][j].clear();
                     }
 
                     else{
-                        qInfo()<<"Before eat rabbit"<<endl;
+                        //  qInfo()<<"Before eat rabbit"<<endl;
                         wolfEatRabbit(mapMatrix[i][j]);
-                        qInfo()<<"After eat rabbit"<<endl;
+                        // qInfo()<<"After eat rabbit"<<endl;
                         mapMatrix[i][j].clear();
                     }
 
 
-               }
+                }
             }
         }
 
@@ -380,7 +342,6 @@ void MainWindow::paintEvent(QPaintEvent *e){
         for(int i=0;i<r;i++){
             qp.drawImage(wolfWild[i].X_pos,wolfWild[i].Y_pos,wolfWild[i].animalImage);
         }
-
     }
 
 }
@@ -394,7 +355,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
 
     Q_UNUSED(e);
 
-    //eraseOldAnimal();
+    eraseOldAnimal();
     moveWild();
     manageCollision();
     repaint();
