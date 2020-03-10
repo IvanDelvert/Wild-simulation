@@ -105,7 +105,22 @@ void MainWindow::clickInitParameters(){
     clearLayout(boutonLayout);
 
 
-   setStyleSheet("background-color:black;");
+  // setStyleSheet("background-color:black;");
+
+
+    QWidget *mainWidget = new QWidget;
+    QWidget *wildScene = new QWidget;
+    wildScene->setStyleSheet("background-color:black;");
+    QWidget *dataScene = new QWidget;
+    QHBoxLayout *box = new QHBoxLayout;
+
+    box->addWidget(wildScene);
+    box->addWidget(dataScene);
+    this->setLayout(box);
+
+
+
+
 
    initWildPos();
    startSimulation = true;

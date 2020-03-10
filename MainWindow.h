@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #pragma once
-
+#include <QMainWindow>
 #include <QWidget>
 #include <QKeyEvent>
 #include <QPushButton>
