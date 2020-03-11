@@ -73,6 +73,8 @@ void MainWindow::initParameterWindow(){
 
         this->setLayout(mainLayout);
 
+
+
 }
 
 
@@ -104,19 +106,22 @@ void MainWindow::clickInitParameters(){
     clearLayout(formLayout);
     clearLayout(boutonLayout);
 
-
-  // setStyleSheet("background-color:black;");
-
+    setStyleSheet("background-color:#112233;");
 
     QWidget *mainWidget = new QWidget;
-    QWidget *wildScene = new QWidget;
-    wildScene->setStyleSheet("background-color:black;");
-    QWidget *dataScene = new QWidget;
-    QHBoxLayout *box = new QHBoxLayout;
+    QVBoxLayout *boxData = new QVBoxLayout;
 
-    box->addWidget(wildScene);
-    box->addWidget(dataScene);
-    this->setLayout(box);
+    mainWidget->setGeometry(1200,0,1600,800);
+    mainWidget->setStyleSheet("background-color:#112233;");
+
+
+
+    mainLayout->addWidget(mainWidget);
+    boxData->addWidget(mainWidget);
+   // this->setLayout(layout0);
+
+
+
 
 
 
@@ -376,7 +381,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
     repaint();
 
     if(rabbitWild.size() + wolfWild.size() > 500000){killTimer(timerID);}
-    qInfo()<<rabbitWild.size()<<endl;
+    //qInfo()<<rabbitWild.size()<<endl;
 
 
 }
