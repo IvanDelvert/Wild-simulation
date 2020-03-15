@@ -112,20 +112,11 @@ void MainWindow::clickInitParameters(){
     QVBoxLayout *boxData = new QVBoxLayout;
 
     mainWidget->setGeometry(1200,0,1600,800);
-    mainWidget->setStyleSheet("background-color:#112233;");
-
-
+    mainWidget->setStyleSheet("background-color:#112233;border: 1px solid white");
 
     mainLayout->addWidget(mainWidget);
     boxData->addWidget(mainWidget);
    // this->setLayout(layout0);
-
-
-
-
-
-
-
 
    initWildPos();
    startSimulation = true;
