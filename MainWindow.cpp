@@ -9,10 +9,11 @@
 #include <QFormLayout>
 #include <QSpinBox>
 #include <QRandomGenerator>
+//#include <QtCharts>
 #include "MainWindow.h"
 #include "Animal.h"
 
-
+//using namespace QtCharts;
 
 QVector <Animal> mapMatrix[160][240];
 
@@ -106,17 +107,47 @@ void MainWindow::clickInitParameters(){
     clearLayout(formLayout);
     clearLayout(boutonLayout);
 
-    setStyleSheet("background-color:#112233;");
+
+   setStyleSheet("background-color:#112233;");
+
+
+    mainLayout->setContentsMargins(1200,0,0,0);
+
+    QLabel *label = new QLabel();
+    label->setText("Live data");
+    label->setAlignment(Qt::AlignHCenter);
+    QFont titleFont("MS Sans Serif", 14, QFont::Bold);
+    label->setFont(titleFont);
+    label->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+    label->setContentsMargins(10,0,0,0);
+
+    QLineSeries* series = new QLineSeries();
+
+    QHBoxLayout *boxTitle = new QHBoxLayout;
+    boxTitle->addWidget(label);
+    mainLayout->addLayout(boxTitle);
+
+
+
+
+    /*
 
     QWidget *mainWidget = new QWidget;
     QVBoxLayout *boxData = new QVBoxLayout;
+    QLabel *label = new QLabel();
+    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    label->setText("first line\nsecond line");
+    label->setGeometry(1220,0,1500,30);
+    label->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
     mainWidget->setGeometry(1200,0,1600,800);
     mainWidget->setStyleSheet("background-color:#112233;border: 1px solid white");
 
     mainLayout->addWidget(mainWidget);
     boxData->addWidget(mainWidget);
+    boxData->addWidget(label);
    // this->setLayout(layout0);
+    */
 
    initWildPos();
    startSimulation = true;
