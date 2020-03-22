@@ -9,6 +9,7 @@
 #include <QSpinBox>
 #include <QLayout>
 #include <QFormLayout>
+#include <QLabel>
 #include "Animal.h"
 
 
@@ -48,12 +49,22 @@ class MainWindow : public QWidget {
         QFormLayout *formLayout;
         QHBoxLayout *boutonLayout;
 
+        QLabel *deadRabbitNumber;
+        QLabel *deadWolfNumber;
+        QLabel *newRabbitNumber;
+        QLabel *newWolfNumber;
+
 
 
         int timerID;
 
         int numberRabbit;
         int numberWolf;
+
+        int numberDeadRabbit = 0;
+        int numberDeadWolf = 0;
+        int numberNewrabbit =0;
+        int numberNewWolf =0;
 
         bool startSimulation;
 
@@ -63,6 +74,7 @@ class MainWindow : public QWidget {
 
         void loadImage();
         void initParameterWindow();
+        void initLiveDataWindow();
         void clearLayout(QLayout *layout);
         void initWildPos();
         void moveWild();
@@ -74,6 +86,7 @@ class MainWindow : public QWidget {
         void wolfReproduction(int n);
         void wolfEatRabbit(QVector<Animal> w);
         int scenarioCollision(QVector<Animal> w);
+        void updateLiveData();
 
 
 };

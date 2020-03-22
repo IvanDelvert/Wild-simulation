@@ -17,6 +17,8 @@
 
 using namespace QtCharts;
 
+
+
 QVector <Animal> mapMatrix[160][240];
 
 /*
@@ -111,66 +113,137 @@ void MainWindow::clickInitParameters(){
 
 
    setStyleSheet("background-color:#112233;");
+   initLiveDataWindow();
 
-
-    mainLayout->setContentsMargins(1200,0,0,0);
-
-    QLabel *label = new QLabel();
-    label->setText("Live data");
-    label->setAlignment(Qt::AlignHCenter);
-    QFont titleFont("MS Sans Serif", 14, QFont::Bold);
-    label->setFont(titleFont);
-    label->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
-    label->setContentsMargins(10,0,0,0);
-
-    QLineSeries* series = new QLineSeries();
-       series->append(0, 6);
-       series->append(2, 4);
-       series->append(3, 8);
-       series->append(7, 4);
-       series->append(10, 5);
-
-       QChart *chart = new QChart();
-       chart->legend()->hide();
-       chart->addSeries(series);
-       chart->createDefaultAxes();
-       chart->setTitle("Simple line chart example");
-
-       QChartView *chartView = new QChartView(chart);
-       chartView->setRenderHint(QPainter::Antialiasing);
-
-
-    QHBoxLayout *boxTitle = new QHBoxLayout;
-    boxTitle->addWidget(label);
-    boxTitle->addWidget(chartView);
-    mainLayout->addLayout(boxTitle);
-
-
-
-
-    /*
-
-    QWidget *mainWidget = new QWidget;
-    QVBoxLayout *boxData = new QVBoxLayout;
-    QLabel *label = new QLabel();
-    label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    label->setText("first line\nsecond line");
-    label->setGeometry(1220,0,1500,30);
-    label->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-
-    mainWidget->setGeometry(1200,0,1600,800);
-    mainWidget->setStyleSheet("background-color:#112233;border: 1px solid white");
-
-    mainLayout->addWidget(mainWidget);
-    boxData->addWidget(mainWidget);
-    boxData->addWidget(label);
-   // this->setLayout(layout0);
-    */
 
    initWildPos();
    startSimulation = true;
    timerID = startTimer(t);
-   qInfo()<<"Rabbit "<<numberRabbit<<"Wolf: "<<numberWolf<<endl;
+
+}
+
+
+//TODO UPDATE THE NUMBER OF DEAD RABBIT WITH NATURAL DEATH
+void MainWindow::initLiveDataWindow(){
+    mainLayout->setContentsMargins(1202,5,0,0);
+
+    QFont titleFont("MS Sans Serif", 14, QFont::Bold);
+    QFont dataTextFont("Tahoma", 10);
+    QFont dataNumberFont("Tahoma", 22,QFont::Bold);
+
+
+     QLabel *label = new QLabel();
+     label->setText("Live data");
+     label->setAlignment(Qt::AlignHCenter);
+     label->setFont(titleFont);
+     label->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+     label->setContentsMargins(10,0,0,0);
+
+     QLineSeries* series = new QLineSeries();
+        series->append(0, 6);
+        series->append(2, 4);
+        series->append(3, 8);
+        series->append(7, 4);
+        series->append(10, 5);
+
+        QChart *chart = new QChart();
+        chart->legend()->hide();
+        chart->addSeries(series);
+        chart->createDefaultAxes();
+        chart->setTitle("Simple line chart example");
+
+        QChartView *chartView = new QChartView(chart);
+        chartView->setRenderHint(QPainter::Antialiasing);
+
+     //Title
+     QHBoxLayout *boxTitle = new QHBoxLayout;
+     boxTitle->addWidget(label);
+
+     //Graphic
+     QHBoxLayout *boxGraphic = new QHBoxLayout;
+     boxGraphic->addWidget(chartView);
+
+     //Number
+     QGridLayout *gridLayout = new QGridLayout;
+
+     QVBoxLayout *deadRabbitVBOX = new QVBoxLayout;
+         QLabel *deadRabbitText = new QLabel();
+            deadRabbitText->setText("Dead rabbit");
+            deadRabbitText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+           //deadRabbitText->setStyleSheet("border: 1px solid red");
+            deadRabbitText->setAlignment(Qt::AlignHCenter);
+            deadRabbitText->setFont(dataTextFont);
+            deadRabbitNumber = new QLabel();
+            deadRabbitNumber->setText("0");
+            deadRabbitNumber->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+            deadRabbitNumber->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+            deadRabbitNumber->setFont(dataNumberFont);
+      deadRabbitVBOX->addWidget(deadRabbitNumber);
+      deadRabbitVBOX->addWidget(deadRabbitText);
+
+      QVBoxLayout *deadWolfVBOX = new QVBoxLayout;
+          QLabel *deadWolfText = new QLabel();
+             deadWolfText->setText("Dead wolf");
+             deadWolfText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+            //deadRabbitText->setStyleSheet("border: 1px solid red");
+             deadWolfText->setAlignment(Qt::AlignHCenter);
+             deadWolfText->setFont(dataTextFont);
+             deadWolfNumber = new QLabel();
+             deadWolfNumber->setText("0");
+             deadWolfNumber->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+             deadWolfNumber->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+             deadWolfNumber->setFont(dataNumberFont);
+       deadWolfVBOX->addWidget(deadWolfNumber);
+       deadWolfVBOX->addWidget(deadWolfText);
+
+       QVBoxLayout *newRabbitVBOX = new QVBoxLayout;
+           QLabel *newRabbitText = new QLabel();
+              newRabbitText->setText("Born rabbit");
+              newRabbitText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+              newRabbitText->setAlignment(Qt::AlignHCenter);
+              newRabbitText->setFont(dataTextFont);
+              newRabbitNumber = new QLabel();
+              newRabbitNumber->setText("0");
+              newRabbitNumber->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+              newRabbitNumber->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+              newRabbitNumber->setFont(dataNumberFont);
+        newRabbitVBOX->addWidget(newRabbitNumber);
+        newRabbitVBOX->addWidget(newRabbitText);
+
+
+        QVBoxLayout *newWolfVBOX = new QVBoxLayout;
+            QLabel *newWolfText = new QLabel();
+               newWolfText->setText("Born wolf");
+               newWolfText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+               newWolfText->setAlignment(Qt::AlignHCenter);
+               newWolfText->setFont(dataTextFont);
+               newWolfNumber = new QLabel();
+               newWolfNumber->setText("0");
+               newWolfNumber->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+               newWolfNumber->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+               newWolfNumber->setFont(dataNumberFont);
+         newWolfVBOX->addWidget(newWolfNumber);
+         newWolfVBOX->addWidget(newWolfText);
+
+
+      gridLayout->addLayout(deadRabbitVBOX,0,0,1,1);
+      gridLayout->addLayout(deadWolfVBOX,0,1,1,1);
+      gridLayout->addLayout(newRabbitVBOX,1,0,1,1);
+      gridLayout->addLayout(newWolfVBOX,1,1,1,1);
+     //QHBoxLayout *deadWolf = new QHBoxLayout;
+
+
+
+     //boxData->addLayout(deadRabitHBOX);
+
+
+
+
+     mainLayout->addLayout(boxTitle);
+     //mainLayout->addLayout(boxGraphic);
+     mainLayout->addLayout(gridLayout);
+
+
 
 
 }
@@ -213,6 +286,7 @@ void MainWindow::eraseOldAnimal(){
     for(int i=0;i<rabbitWild.size();i++){
         if(rabbitWild[i].age > rabbitWild[i].lifeExpectancy){
             rabbitWild.erase(rabbitWild.begin()+i);
+            numberDeadRabbit++;
         }
         else{
             rabbitWild[i].age++;
@@ -221,6 +295,8 @@ void MainWindow::eraseOldAnimal(){
     for(int i=0;i<wolfWild.size();i++){
         if(wolfWild[i].age > wolfWild[i].lifeExpectancy){
             wolfWild.erase(wolfWild.begin()+i);
+            numberDeadWolf++;
+
         }
         else{
             wolfWild[i].age++;
@@ -257,6 +333,8 @@ void MainWindow::moveWild(){
 void MainWindow::rabbitReproduction(int n){
     for(int k=1;k<=n;k++){
         Rabbit r;
+        //increment variable for live data
+        numberNewrabbit++;
         int xRandRabbit = QRandomGenerator::global()->bounded(240);
         int yRandRabbit = QRandomGenerator::global()->bounded(160);
         r.setPos(xRandRabbit*5,yRandRabbit*5);
@@ -272,6 +350,8 @@ void MainWindow::rabbitReproduction(int n){
 void MainWindow::wolfReproduction(int n){
     for(int k=1;k<=n;k++){
         Wolf w;
+        //increment variable for live data
+        numberNewWolf++;
         int xRandWolf = QRandomGenerator::global()->bounded(240);
         int yRandWolf = QRandomGenerator::global()->bounded(160);
         w.setPos(xRandWolf*5,yRandWolf*5);
@@ -299,6 +379,7 @@ void MainWindow::wolfEatRabbit(QVector<Animal> w){
 
     QVector<Rabbit>::iterator itt;
     int numberOfKill = qMin(rabbit,wolf);
+    numberDeadRabbit += numberOfKill;
     if(numberOfKill > 1){qInfo()<<"Number of kill: "<<numberOfKill<<endl;}
     int i=1;
     while(i<=numberOfKill){
@@ -382,6 +463,15 @@ void MainWindow::manageCollision(){
 
 }
 
+void MainWindow::updateLiveData(){
+    deadRabbitNumber->setText(QString::number(numberDeadRabbit));
+    deadWolfNumber->setText(QString::number(numberDeadWolf));
+    newWolfNumber->setText(QString::number(numberNewWolf));
+    newRabbitNumber->setText(QString::number(numberNewrabbit));
+}
+
+
+
 /*
  * Event that perform the display of each species
  *
@@ -418,6 +508,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
     eraseOldAnimal();
     moveWild();
     manageCollision();
+    updateLiveData();
     repaint();
 
     if(rabbitWild.size() + wolfWild.size() > 500000){killTimer(timerID);}
