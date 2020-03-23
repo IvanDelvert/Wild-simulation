@@ -12,6 +12,7 @@
 #include <QChart>
 #include <QLineSeries>
 #include <QChartView>
+#include <QPieSeries>
 #include "MainWindow.h"
 #include "Animal.h"
 
@@ -139,21 +140,66 @@ void MainWindow::initLiveDataWindow(){
      label->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
      label->setContentsMargins(10,0,0,0);
 
-     QLineSeries* series = new QLineSeries();
-        series->append(0, 6);
-        series->append(2, 4);
-        series->append(3, 8);
-        series->append(7, 4);
-        series->append(10, 5);
+     QChartView *chartView = new QChartView;
+     chartView->setRenderHint(QPainter::Antialiasing);
+     QChart *chart = chartView->chart();
+     chart->legend()->setVisible(false);
+     chart->setTitle("Proportion rabbit VS wolf");
+     chart->setAnimationOptions(QChart::AllAnimations);
+     chart->setBackgroundVisible(false);
 
-        QChart *chart = new QChart();
-        chart->legend()->hide();
-        chart->addSeries(series);
-        chart->createDefaultAxes();
-        chart->setTitle("Simple line chart example");
+     /*
+     qreal minSize = 0.1;
+     qreal maxSize = 0.9;
+     int donutCount = 5;
+     for (int i = 0; i < donutCount; i++) {
+         QPieSeries *donut = new QPieSeries;
+         int sliceCount =  3 + QRandomGenerator::global()->bounded(3);
+         for (int j = 0; j < sliceCount; j++) {
+             qreal value = 100 + QRandomGenerator::global()->bounded(100);
+             QPieSlice *slice = new QPieSlice(QString("%1").arg(value), value);
+             slice->setLabelVisible(true);
+             slice->setLabelColor(Qt::white);
+             slice->setLabelPosition(QPieSlice::LabelInsideTangential);
+            // connect(slice, &QPieSlice::hovered, this, &Widget::explodeSlice);
+             donut->append(slice);
+             donut->setHoleSize(minSize + i * (maxSize - minSize) / donutCount);
+             donut->setPieSize(minSize + (i + 1) * (maxSize - minSize) / donutCount);
+         }
+        // m_donuts.append(donut);
+         chartView->chart()->addSeries(donut);
+     }
+*/
 
-        QChartView *chartView = new QChartView(chart);
-        chartView->setRenderHint(QPainter::Antialiasing);
+
+     QPieSeries *donut = new QPieSeries;
+     qInfo()<<numberRabbit<<endl;
+     qreal wolfPourcentage = (double(numberRabbit) / (numberRabbit + numberWolf))*100;
+     qreal rabbitPourcentage = (double(numberWolf) / (numberRabbit + numberWolf))*100;
+     QPieSlice *wolfSlice = new QPieSlice(QString("%1").arg(wolfPourcentage), wolfPourcentage);
+     QPieSlice *rabbitSlice = new QPieSlice(QString("%1").arg(rabbitPourcentage), rabbitPourcentage);
+     wolfSlice->setLabelVisible(true);
+     wolfSlice->setLabelColor(Qt::white);
+     wolfSlice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+     rabbitSlice->setLabelVisible(true);
+     rabbitSlice->setLabelColor(Qt::white);
+     rabbitSlice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+
+     donut->append(wolfSlice);
+     donut->append(rabbitSlice);
+
+     donut->setHoleSize(0);
+     donut->setPieSize(0.95);
+    //SET THE SIZE
+
+
+
+
+    chartView->chart()->addSeries(donut);
+
+     //TODO A CONNECTION WITH THE TIMER EVENT
+
+
 
      //Title
      QHBoxLayout *boxTitle = new QHBoxLayout;
@@ -165,17 +211,19 @@ void MainWindow::initLiveDataWindow(){
 
      //Number
      QGridLayout *gridLayout = new QGridLayout;
+    // gridLayout->setSpacing(5);
 
      QVBoxLayout *deadRabbitVBOX = new QVBoxLayout;
          QLabel *deadRabbitText = new QLabel();
             deadRabbitText->setText("Dead rabbit");
             deadRabbitText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
-           //deadRabbitText->setStyleSheet("border: 1px solid red");
+            //deadRabbitText->setStyleSheet("border: 1px solid red");
             deadRabbitText->setAlignment(Qt::AlignHCenter);
             deadRabbitText->setFont(dataTextFont);
             deadRabbitNumber = new QLabel();
             deadRabbitNumber->setText("0");
             deadRabbitNumber->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
+            //deadWolfNumber->setStyleSheet("border: 1px solid red");
             deadRabbitNumber->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
             deadRabbitNumber->setFont(dataNumberFont);
       deadRabbitVBOX->addWidget(deadRabbitNumber);
@@ -184,8 +232,8 @@ void MainWindow::initLiveDataWindow(){
       QVBoxLayout *deadWolfVBOX = new QVBoxLayout;
           QLabel *deadWolfText = new QLabel();
              deadWolfText->setText("Dead wolf");
-             deadWolfText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
-            //deadRabbitText->setStyleSheet("border: 1px solid red");
+             deadWolfText->setStyleSheet("QLabel{color: rgb(255,255,255);}");
+             //deadWolfText->setStyleSheet("border: 1px solid red");
              deadWolfText->setAlignment(Qt::AlignHCenter);
              deadWolfText->setFont(dataTextFont);
              deadWolfNumber = new QLabel();
@@ -193,12 +241,13 @@ void MainWindow::initLiveDataWindow(){
              deadWolfNumber->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
              deadWolfNumber->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
              deadWolfNumber->setFont(dataNumberFont);
+             //deadWolfNumber->setStyleSheet("border: 1px solid red");
        deadWolfVBOX->addWidget(deadWolfNumber);
        deadWolfVBOX->addWidget(deadWolfText);
 
        QVBoxLayout *newRabbitVBOX = new QVBoxLayout;
            QLabel *newRabbitText = new QLabel();
-              newRabbitText->setText("Born rabbit");
+              newRabbitText->setText("Newborn rabbit");
               newRabbitText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
               newRabbitText->setAlignment(Qt::AlignHCenter);
               newRabbitText->setFont(dataTextFont);
@@ -213,7 +262,7 @@ void MainWindow::initLiveDataWindow(){
 
         QVBoxLayout *newWolfVBOX = new QVBoxLayout;
             QLabel *newWolfText = new QLabel();
-               newWolfText->setText("Born wolf");
+               newWolfText->setText("Newborn wolves");
                newWolfText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
                newWolfText->setAlignment(Qt::AlignHCenter);
                newWolfText->setFont(dataTextFont);
@@ -240,7 +289,7 @@ void MainWindow::initLiveDataWindow(){
 
 
      mainLayout->addLayout(boxTitle);
-     //mainLayout->addLayout(boxGraphic);
+     mainLayout->addLayout(boxGraphic);
      mainLayout->addLayout(gridLayout);
 
 
