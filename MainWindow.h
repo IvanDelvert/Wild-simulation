@@ -10,9 +10,13 @@
 #include <QLayout>
 #include <QFormLayout>
 #include <QLabel>
+#include <QChart>
+#include <QLineSeries>
+#include <QChartView>
+#include <QPieSeries>
 #include "Animal.h"
 
-
+using namespace QtCharts;
 
 class MainWindow : public QWidget {
 
@@ -54,6 +58,9 @@ class MainWindow : public QWidget {
         QLabel *newRabbitNumber;
         QLabel *newWolfNumber;
 
+        QPieSeries *donut;
+        QPieSlice *wolfSlice;
+        QPieSlice *rabbitSlice;
 
 
         int timerID;

@@ -172,18 +172,20 @@ void MainWindow::initLiveDataWindow(){
 */
 
 
-     QPieSeries *donut = new QPieSeries;
+     donut = new QPieSeries;
      qInfo()<<numberRabbit<<endl;
      qreal wolfPourcentage = (double(numberRabbit) / (numberRabbit + numberWolf))*100;
      qreal rabbitPourcentage = (double(numberWolf) / (numberRabbit + numberWolf))*100;
-     QPieSlice *wolfSlice = new QPieSlice(QString("%1").arg(wolfPourcentage), wolfPourcentage);
-     QPieSlice *rabbitSlice = new QPieSlice(QString("%1").arg(rabbitPourcentage), rabbitPourcentage);
+     wolfSlice = new QPieSlice(QString("%1").arg(wolfPourcentage) +"%", wolfPourcentage);
+     rabbitSlice = new QPieSlice(QString("%1").arg(rabbitPourcentage) +"%", rabbitPourcentage);
      wolfSlice->setLabelVisible(true);
      wolfSlice->setLabelColor(Qt::white);
      wolfSlice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+     wolfSlice->setColor(Qt::red);
      rabbitSlice->setLabelVisible(true);
      rabbitSlice->setLabelColor(Qt::white);
      rabbitSlice->setLabelPosition(QPieSlice::LabelInsideHorizontal);
+     rabbitSlice->setColor(QColor(65,205,82));
 
      donut->append(wolfSlice);
      donut->append(rabbitSlice);
@@ -517,6 +519,17 @@ void MainWindow::updateLiveData(){
     deadWolfNumber->setText(QString::number(numberDeadWolf));
     newWolfNumber->setText(QString::number(numberNewWolf));
     newRabbitNumber->setText(QString::number(numberNewrabbit));
+
+    int nR = rabbitWild.size();
+    int nW = wolfWild.size();
+
+    qreal wolfPourcentage = (double(nW) / (nR + nW))*100;
+    qreal rabbitPourcentage = (double(nR) / (nR + nW))*100;
+    wolfSlice->setLabel(QString("%1").arg(wolfPourcentage) +"%");
+    wolfSlice->setValue(wolfPourcentage);
+    rabbitSlice->setLabel(QString("%1").arg(rabbitPourcentage) +"%");
+    rabbitSlice->setValue(rabbitPourcentage);
+
 }
 
 
