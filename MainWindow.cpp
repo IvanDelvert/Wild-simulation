@@ -29,8 +29,9 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent){
 
     setFixedSize(WIDTH,HIGHT);
     startSimulation = false;
-    initParameterWindow();
     loadImage();
+    initParameterWindow();
+
 }
 
 
@@ -41,11 +42,17 @@ void MainWindow::loadImage(){
 
     rabbitImage.load("c:\\Users\\Ivan\\wildSimulation\\img\\rabbit.png");
     wolfImage.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf.png");
+    qInfo()<<wolfImage.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf.png")<<endl;
+    wolfPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf_picto.png");
+    qInfo()<<wolfPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf_picto.png")<<endl;
+    rabbitPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\rabbit_picto.png");
 
 }
 
 
 void MainWindow::initParameterWindow(){
+
+        setStyleSheet("background-color:#ffffff;");
 
         numberOfRabbit = new QSpinBox;
         numberOfWolf = new QSpinBox;
@@ -53,7 +60,17 @@ void MainWindow::initParameterWindow(){
 
         numberOfRabbit->setRange(0,30000);
         numberOfWolf->setRange(0,30000);
-        timerEdit->setRange(50,5000);
+        timerEdit->setRange(50,6000);
+
+        imageLayout = new QHBoxLayout;
+        QLabel *imgRabbitPicto = new QLabel;
+        imgRabbitPicto->setPixmap(QPixmap::fromImage(rabbitPicto));
+        QLabel *imgWolfPicto = new QLabel;
+        imgWolfPicto->setPixmap(QPixmap::fromImage(wolfPicto));
+
+        imageLayout->addWidget(imgRabbitPicto);
+        imageLayout->addWidget(imgWolfPicto);
+
 
 
         formLayout = new QFormLayout;
@@ -73,7 +90,8 @@ void MainWindow::initParameterWindow(){
         boutonLayout->addWidget(validate);
 
         mainLayout = new QVBoxLayout;
-        mainLayout->setContentsMargins(650,300,650,400);
+        mainLayout->setContentsMargins(500,200,500,200);
+        mainLayout->addLayout(imageLayout);
         mainLayout->addLayout(formLayout);
         mainLayout->addLayout(boutonLayout);
 

@@ -44,6 +44,8 @@ class MainWindow : public QWidget {
 
         QImage rabbitImage;
         QImage wolfImage;
+        QImage rabbitPicto;
+        QImage wolfPicto;
 
         QSpinBox *numberOfRabbit;
         QSpinBox *numberOfWolf;
@@ -52,6 +54,8 @@ class MainWindow : public QWidget {
         QVBoxLayout *mainLayout;
         QFormLayout *formLayout;
         QHBoxLayout *boutonLayout;
+
+        QHBoxLayout *imageLayout;
 
         QLabel *deadRabbitNumber;
         QLabel *deadWolfNumber;
