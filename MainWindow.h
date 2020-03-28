@@ -54,6 +54,9 @@ class MainWindow : public QWidget {
         QVBoxLayout *mainLayout;
         QFormLayout *formLayout;
         QHBoxLayout *boutonLayout;
+        QHBoxLayout *QSpinBoxLayout;
+        QHBoxLayout *textSPinBoxLayout;
+        QVBoxLayout *titleLayout;
 
         QHBoxLayout *imageLayout;
 

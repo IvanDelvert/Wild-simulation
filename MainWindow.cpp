@@ -42,9 +42,7 @@ void MainWindow::loadImage(){
 
     rabbitImage.load("c:\\Users\\Ivan\\wildSimulation\\img\\rabbit.png");
     wolfImage.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf.png");
-    qInfo()<<wolfImage.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf.png")<<endl;
     wolfPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf_picto.png");
-    qInfo()<<wolfPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf_picto.png")<<endl;
     rabbitPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\rabbit_picto.png");
 
 }
@@ -53,9 +51,20 @@ void MainWindow::loadImage(){
 void MainWindow::initParameterWindow(){
 
         setStyleSheet("background-color:#ffffff;");
+        QFont spinBoxLabelFont("Tahoma", 11);
+        QFont titleAppFont("Tahoma", 40,QFont::Bold);
+
+        titleLayout = new QVBoxLayout;
+        QLabel *titleText = new QLabel;
+        titleText->setText("Population dynamics simulation");
+        titleText->setFont(titleAppFont);
+        titleText->setAlignment(Qt::AlignHCenter);
+        titleLayout->addWidget(titleText);
 
         numberOfRabbit = new QSpinBox;
+        numberOfRabbit->setAlignment(Qt::AlignCenter);
         numberOfWolf = new QSpinBox;
+        numberOfWolf->setAlignment(Qt::AlignCenter);
         timerEdit = new QSpinBox;
 
         numberOfRabbit->setRange(0,30000);
@@ -64,35 +73,87 @@ void MainWindow::initParameterWindow(){
 
         imageLayout = new QHBoxLayout;
         QLabel *imgRabbitPicto = new QLabel;
-        imgRabbitPicto->setPixmap(QPixmap::fromImage(rabbitPicto));
+        imgRabbitPicto->setPixmap(QPixmap::fromImage(rabbitPicto).scaled(295,200,Qt::KeepAspectRatio));
         QLabel *imgWolfPicto = new QLabel;
         imgWolfPicto->setPixmap(QPixmap::fromImage(wolfPicto));
 
         imageLayout->addWidget(imgRabbitPicto);
         imageLayout->addWidget(imgWolfPicto);
+        //imageLayout->setContentsMargins(450,200,450,0);
 
+        QSpinBoxLayout = new QHBoxLayout;
+        QSpinBoxLayout->addWidget(numberOfRabbit);
+        QSpinBoxLayout->addWidget(numberOfWolf);
+        //QSpinBoxLayout->setContentsMargins(450,0,450,0);
 
-
-        formLayout = new QFormLayout;
-        formLayout->addRow("Number of rabbit: " ,numberOfRabbit);
-        formLayout->addRow("Number of wolf: " ,numberOfWolf);
-        formLayout->addRow("Time simulation (ms): " ,timerEdit);
-
+        textSPinBoxLayout = new QHBoxLayout;
+        //textSPinBoxLayout->setContentsMargins(450,0,450,0);
+            QLabel *rabbitTextSpinBox = new QLabel;
+            rabbitTextSpinBox->setText("Number of rabbit");
+            rabbitTextSpinBox->setFont(spinBoxLabelFont);
+            rabbitTextSpinBox->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+            //rabbitTextSpinBox->setStyleSheet("background-color:#112233;");
+            QLabel *wolfTextSpinBox = new QLabel;
+            wolfTextSpinBox->setText("Number of wolf");
+            wolfTextSpinBox->setFont(spinBoxLabelFont);
+            wolfTextSpinBox->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+            textSPinBoxLayout->addWidget(rabbitTextSpinBox);
+            textSPinBoxLayout->addWidget(wolfTextSpinBox);
 
         boutonLayout = new QHBoxLayout;
         QPushButton *validate = new QPushButton("OK");
+        validate->setStyleSheet("QPushButton{"
+                                    "background-color: #fdfdfd;"
+                                    "border-style: outset;"
+                                    "border-width: 1px;"
+                                    "border-radius: 10px;"
+                                    "border-color: black;"
+                                    "font: 12px;"
+                                    "padding: 6px;}"
+                                "QPushButton:hover{"
+                                    "background-color: #fcfcfc;"
+                                    "border-style: outset;"
+                                    "border-width: 1px;"
+                                    "border-radius: 10px;"
+                                    "border-color: black;"
+                                    "font: 12px;"
+                                    "padding: 6px;}"
+                                );
+
+
         QPushButton *quit = new QPushButton("Quit");
+        quit->setStyleSheet("QPushButton{"
+                            "background-color: #fdfdfd;"
+                            "border-style: outset;"
+                            "border-width: 1px;"
+                            "border-radius: 10px;"
+                            "border-color: black;"
+                            "font: 12px;"
+                            "padding: 6px;}"
+                        "QPushButton:hover{"
+                            "background-color: #fcfcfc;"
+                            "border-style: outset;"
+                            "border-width: 1px;"
+                            "border-radius: 10px;"
+                            "border-color: black;"
+                            "font: 12px;"
+                            "padding: 6px;}"
+                        );
+
 
         QWidget::connect(quit,SIGNAL(clicked()),this,SLOT(quit()));
         QWidget::connect(validate,SIGNAL(clicked()),this,SLOT(clickInitParameters()));
 
         boutonLayout->addWidget(quit);
         boutonLayout->addWidget(validate);
+        //boutonLayout->setContentsMargins(450,0,450,150);
 
         mainLayout = new QVBoxLayout;
-        mainLayout->setContentsMargins(500,200,500,200);
+        mainLayout->setContentsMargins(350,5,350,150);
+        mainLayout->addLayout(titleLayout);
         mainLayout->addLayout(imageLayout);
-        mainLayout->addLayout(formLayout);
+        mainLayout->addLayout(QSpinBoxLayout);
+        mainLayout->addLayout(textSPinBoxLayout);
         mainLayout->addLayout(boutonLayout);
 
         this->setLayout(mainLayout);
@@ -127,8 +188,12 @@ void MainWindow::clickInitParameters(){
     numberRabbit = numberOfRabbit->value();
     numberWolf = numberOfWolf->value();
     int t = timerEdit->value();
-    clearLayout(formLayout);
+    clearLayout(titleLayout);
+    clearLayout(imageLayout);
+    clearLayout(QSpinBoxLayout);
+    clearLayout(textSPinBoxLayout);
     clearLayout(boutonLayout);
+
 
 
    setStyleSheet("background-color:#112233;");
@@ -166,30 +231,6 @@ void MainWindow::initLiveDataWindow(){
      chart->setAnimationOptions(QChart::AllAnimations);
      chart->setBackgroundVisible(false);
 
-     /*
-     qreal minSize = 0.1;
-     qreal maxSize = 0.9;
-     int donutCount = 5;
-     for (int i = 0; i < donutCount; i++) {
-         QPieSeries *donut = new QPieSeries;
-         int sliceCount =  3 + QRandomGenerator::global()->bounded(3);
-         for (int j = 0; j < sliceCount; j++) {
-             qreal value = 100 + QRandomGenerator::global()->bounded(100);
-             QPieSlice *slice = new QPieSlice(QString("%1").arg(value), value);
-             slice->setLabelVisible(true);
-             slice->setLabelColor(Qt::white);
-             slice->setLabelPosition(QPieSlice::LabelInsideTangential);
-            // connect(slice, &QPieSlice::hovered, this, &Widget::explodeSlice);
-             donut->append(slice);
-             donut->setHoleSize(minSize + i * (maxSize - minSize) / donutCount);
-             donut->setPieSize(minSize + (i + 1) * (maxSize - minSize) / donutCount);
-         }
-        // m_donuts.append(donut);
-         chartView->chart()->addSeries(donut);
-     }
-*/
-
-
      donut = new QPieSeries;
      qInfo()<<numberRabbit<<endl;
      qreal wolfPourcentage = (double(numberRabbit) / (numberRabbit + numberWolf))*100;
@@ -213,12 +254,9 @@ void MainWindow::initLiveDataWindow(){
     //SET THE SIZE
 
 
-
-
     chartView->chart()->addSeries(donut);
 
      //TODO A CONNECTION WITH THE TIMER EVENT
-
 
 
      //Title
@@ -300,12 +338,6 @@ void MainWindow::initLiveDataWindow(){
       gridLayout->addLayout(newRabbitVBOX,1,0,1,1);
       gridLayout->addLayout(newWolfVBOX,1,1,1,1);
      //QHBoxLayout *deadWolf = new QHBoxLayout;
-
-
-
-     //boxData->addLayout(deadRabitHBOX);
-
-
 
 
      mainLayout->addLayout(boxTitle);
