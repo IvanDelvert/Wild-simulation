@@ -50,7 +50,7 @@ void MainWindow::loadImage(){
 
 void MainWindow::initParameterWindow(){
 
-        setStyleSheet("background-color:#ffffff;");
+        setStyleSheet("background-color:#112233;");
         QFont spinBoxLabelFont("Tahoma", 11);
         QFont titleAppFont("Tahoma", 40,QFont::Bold);
 
@@ -59,12 +59,28 @@ void MainWindow::initParameterWindow(){
         titleText->setText("Population dynamics simulation");
         titleText->setFont(titleAppFont);
         titleText->setAlignment(Qt::AlignHCenter);
+        titleText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
         titleLayout->addWidget(titleText);
 
         numberOfRabbit = new QSpinBox;
         numberOfRabbit->setAlignment(Qt::AlignCenter);
+        numberOfRabbit->setStyleSheet("QSpinBox{"
+                                      "background-color: #ffffff;"
+                                      "font-weight: bold;"
+                                      "}"
+
+
+                                                        );
+
         numberOfWolf = new QSpinBox;
         numberOfWolf->setAlignment(Qt::AlignCenter);
+        numberOfWolf->setStyleSheet("QSpinBox{"
+                                    "background-color: #ffffff;"
+                                    "font-weight: bold;"
+                                    "}"
+
+
+                                                      );
         timerEdit = new QSpinBox;
 
         numberOfRabbit->setRange(0,30000);
@@ -79,23 +95,25 @@ void MainWindow::initParameterWindow(){
 
         imageLayout->addWidget(imgRabbitPicto);
         imageLayout->addWidget(imgWolfPicto);
-        //imageLayout->setContentsMargins(450,200,450,0);
+        imageLayout->setContentsMargins(150,0,150,0);
 
         QSpinBoxLayout = new QHBoxLayout;
         QSpinBoxLayout->addWidget(numberOfRabbit);
         QSpinBoxLayout->addWidget(numberOfWolf);
-        //QSpinBoxLayout->setContentsMargins(450,0,450,0);
+        QSpinBoxLayout->setContentsMargins(150,0,150,0);
 
         textSPinBoxLayout = new QHBoxLayout;
-        //textSPinBoxLayout->setContentsMargins(450,0,450,0);
+        textSPinBoxLayout->setContentsMargins(150,0,150,0);
             QLabel *rabbitTextSpinBox = new QLabel;
             rabbitTextSpinBox->setText("Number of rabbit");
             rabbitTextSpinBox->setFont(spinBoxLabelFont);
+            rabbitTextSpinBox->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
             rabbitTextSpinBox->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
             //rabbitTextSpinBox->setStyleSheet("background-color:#112233;");
             QLabel *wolfTextSpinBox = new QLabel;
             wolfTextSpinBox->setText("Number of wolf");
             wolfTextSpinBox->setFont(spinBoxLabelFont);
+            wolfTextSpinBox->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
             wolfTextSpinBox->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
             textSPinBoxLayout->addWidget(rabbitTextSpinBox);
             textSPinBoxLayout->addWidget(wolfTextSpinBox);
@@ -146,7 +164,7 @@ void MainWindow::initParameterWindow(){
 
         boutonLayout->addWidget(quit);
         boutonLayout->addWidget(validate);
-        //boutonLayout->setContentsMargins(450,0,450,150);
+        boutonLayout->setContentsMargins(150,0,150,0);
 
         mainLayout = new QVBoxLayout;
         mainLayout->setContentsMargins(350,5,350,150);
