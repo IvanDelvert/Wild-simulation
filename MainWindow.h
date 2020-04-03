@@ -68,6 +68,21 @@ class MainWindow : public QWidget {
         QPieSeries *donut;
         QPieSlice *wolfSlice;
         QPieSlice *rabbitSlice;
+        
+        QLineSeries *rabbitSerie;
+        QLineSeries *wolfSerie;
+
+        //live Data
+        QHBoxLayout *boxTitle;
+        QHBoxLayout *boxGraphic;
+        QGridLayout *gridLayout;
+
+
+        //Grid Layout:
+        QVBoxLayout *deadRabbitVBOX;
+        QVBoxLayout *deadWolfVBOX;
+        QVBoxLayout *newRabbitVBOX;
+        QVBoxLayout *newWolfVBOX;
 
 
         int timerID;
@@ -79,6 +94,8 @@ class MainWindow : public QWidget {
         int numberDeadWolf = 0;
         int numberNewrabbit =0;
         int numberNewWolf =0;
+
+        qreal numberGeneration = -1;
 
         bool startSimulation;
 
@@ -101,6 +118,9 @@ class MainWindow : public QWidget {
         void wolfEatRabbit(QVector<Animal> w);
         int scenarioCollision(QVector<Animal> w);
         void updateLiveData();
+        void updateGraphicSerie();
+        void endSimulation();
+        void displayFinalWindow();
 
 
 };

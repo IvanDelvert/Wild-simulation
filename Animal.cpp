@@ -192,7 +192,7 @@ Wolf::Wolf() : Animal(){
     age = 0;
     angry = 0;
     sexualMatuity = 100;
-    lifeExpectancy = QRandomGenerator::global()->bounded(2000,2500);
+    lifeExpectancy = QRandomGenerator::global()->bounded(500,1000);
 }
 
 

@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent){
     loadImage();
     initParameterWindow();
 
+
 }
 
 
@@ -49,6 +50,10 @@ void MainWindow::loadImage(){
 
 
 void MainWindow::initParameterWindow(){
+
+        //TODO MOVE THIS:
+        rabbitSerie = new QLineSeries;
+        wolfSerie = new QLineSeries;
 
         setStyleSheet("background-color:#112233;");
         QFont spinBoxLabelFont("Tahoma", 11);
@@ -278,18 +283,18 @@ void MainWindow::initLiveDataWindow(){
 
 
      //Title
-     QHBoxLayout *boxTitle = new QHBoxLayout;
+     boxTitle = new QHBoxLayout;
      boxTitle->addWidget(label);
 
      //Graphic
-     QHBoxLayout *boxGraphic = new QHBoxLayout;
+     boxGraphic = new QHBoxLayout;
      boxGraphic->addWidget(chartView);
 
      //Number
-     QGridLayout *gridLayout = new QGridLayout;
+     gridLayout = new QGridLayout;
     // gridLayout->setSpacing(5);
 
-     QVBoxLayout *deadRabbitVBOX = new QVBoxLayout;
+     deadRabbitVBOX = new QVBoxLayout;
          QLabel *deadRabbitText = new QLabel();
             deadRabbitText->setText("Dead rabbit");
             deadRabbitText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
@@ -305,7 +310,7 @@ void MainWindow::initLiveDataWindow(){
       deadRabbitVBOX->addWidget(deadRabbitNumber);
       deadRabbitVBOX->addWidget(deadRabbitText);
 
-      QVBoxLayout *deadWolfVBOX = new QVBoxLayout;
+      deadWolfVBOX = new QVBoxLayout;
           QLabel *deadWolfText = new QLabel();
              deadWolfText->setText("Dead wolf");
              deadWolfText->setStyleSheet("QLabel{color: rgb(255,255,255);}");
@@ -321,7 +326,7 @@ void MainWindow::initLiveDataWindow(){
        deadWolfVBOX->addWidget(deadWolfNumber);
        deadWolfVBOX->addWidget(deadWolfText);
 
-       QVBoxLayout *newRabbitVBOX = new QVBoxLayout;
+       newRabbitVBOX = new QVBoxLayout;
            QLabel *newRabbitText = new QLabel();
               newRabbitText->setText("Newborn rabbit");
               newRabbitText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
@@ -336,7 +341,7 @@ void MainWindow::initLiveDataWindow(){
         newRabbitVBOX->addWidget(newRabbitText);
 
 
-        QVBoxLayout *newWolfVBOX = new QVBoxLayout;
+        newWolfVBOX = new QVBoxLayout;
             QLabel *newWolfText = new QLabel();
                newWolfText->setText("Newborn wolves");
                newWolfText->setStyleSheet(QStringLiteral("QLabel{color: rgb(255,255,255);}"));
@@ -543,7 +548,6 @@ int MainWindow::scenarioCollision(QVector<Animal> w){
 *
  * */
 void MainWindow::manageCollision(){
-    bool onlyRabbit;
     for(int i=0;i<160;i++){
         for(int j=0;j<240;j++){
             if(mapMatrix[i][j].size() !=0){
@@ -579,6 +583,58 @@ void MainWindow::manageCollision(){
         }
 
     }
+
+}
+
+void MainWindow::endSimulation(){
+    clearLayout(boxTitle);
+    clearLayout(boxGraphic);
+    clearLayout(deadRabbitVBOX);
+    clearLayout(deadWolfVBOX);
+    clearLayout(newRabbitVBOX);
+    clearLayout(newWolfVBOX);
+    gridLayout->deleteLater();
+
+    rabbitWild.clear();
+    wolfWild.clear();
+
+
+}
+
+void MainWindow::updateGraphicSerie(){
+
+    numberGeneration+=1;
+    qreal yRabbit = rabbitWild.size();
+    qreal yWolf = wolfWild.size();
+    rabbitSerie->append(numberGeneration,yRabbit);
+    wolfSerie->append(numberGeneration,yWolf);
+}
+
+void MainWindow::displayFinalWindow(){
+
+    QHBoxLayout *mainBox = new QHBoxLayout;
+
+
+    QChart *chart = new QChart();
+       chart->legend()->hide();
+       //QVector rabbitSerie->pointsVector();
+
+       qInfo()<<"nb: "<<rabbitSerie->count()<<endl;
+       rabbitSerie->setColor(QColor(65,205,82));
+       wolfSerie->setColor(Qt::red);
+       chart->addSeries(rabbitSerie);
+       chart->addSeries(wolfSerie);
+       chart->createDefaultAxes();
+       chart->setTitle("Simple line chart example");
+
+       QChartView *chartView = new QChartView(chart);
+       chartView->setRenderHint(QPainter::Antialiasing);
+
+       mainBox->addWidget(chartView);
+
+       mainLayout->setContentsMargins(5,5,5,5);
+       mainLayout->addLayout(mainBox);
+
 
 }
 
@@ -624,6 +680,8 @@ void MainWindow::paintEvent(QPaintEvent *e){
         }
     }
 
+
+
 }
 
 /*
@@ -639,9 +697,15 @@ void MainWindow::timerEvent(QTimerEvent *e){
     moveWild();
     manageCollision();
     updateLiveData();
-    repaint();
+    updateGraphicSerie();
 
-    if(rabbitWild.size() + wolfWild.size() > 500000){killTimer(timerID);}
+    if(rabbitWild.size() + wolfWild.size() > 100000){
+        killTimer(timerID);
+        endSimulation();
+        displayFinalWindow();
+
+    }
+    repaint();
     //qInfo()<<rabbitWild.size()<<endl;
 
 
