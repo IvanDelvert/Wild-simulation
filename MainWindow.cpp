@@ -594,16 +594,13 @@ void MainWindow::endSimulation(){
     clearLayout(newRabbitVBOX);
     clearLayout(newWolfVBOX);
     gridLayout->deleteLater();
-
     rabbitWild.clear();
     wolfWild.clear();
-
-
 }
 
 void MainWindow::updateGraphicSerie(){
 
-    numberGeneration+=1;
+    numberGeneration+=50;
     qreal yRabbit = rabbitWild.size();
     qreal yWolf = wolfWild.size();
     rabbitSerie->append(numberGeneration,yRabbit);
@@ -612,27 +609,41 @@ void MainWindow::updateGraphicSerie(){
 
 void MainWindow::displayFinalWindow(){
 
+    QFont titleChart("Tahoma", 22,Qt::white);
     QHBoxLayout *mainBox = new QHBoxLayout;
 
 
     QChart *chart = new QChart();
-       chart->legend()->hide();
-       //QVector rabbitSerie->pointsVector();
 
-       qInfo()<<"nb: "<<rabbitSerie->count()<<endl;
+
        rabbitSerie->setColor(QColor(65,205,82));
        wolfSerie->setColor(Qt::red);
+       chart->legend()->setAlignment(Qt::AlignRight);
+       chart->legend()->setLabelColor(Qt::white);
+       rabbitSerie->setName("Rabbit population");
+       wolfSerie->setName("Wolf population");
        chart->addSeries(rabbitSerie);
        chart->addSeries(wolfSerie);
        chart->createDefaultAxes();
-       chart->setTitle("Simple line chart example");
+       chart->axes(Qt::Vertical).first()->setMin(0);
+       chart->axes(Qt::Vertical).first()->setLabelsColor(Qt::white);
+       chart->axes(Qt::Vertical).first()->setTitleText("Size of the population");
+       chart->axes(Qt::Vertical).first()->setTitleBrush(Qt::white);
+       chart->axes(Qt::Horizontal).first()->setTitleText("Time (ms)");
+       chart->axes(Qt::Horizontal).first()->setLabelsColor(Qt::white);
+       chart->axes(Qt::Horizontal).first()->setTitleBrush(Qt::white);
+       chart->setTitleFont(titleChart);
+       chart->setTitle("Population evolution over time");
+       chart->setTitleBrush(Qt::white);
+       chart->setBackgroundVisible(false);
+       chart->setAnimationOptions(QChart::AllAnimations);
+
 
        QChartView *chartView = new QChartView(chart);
        chartView->setRenderHint(QPainter::Antialiasing);
-
        mainBox->addWidget(chartView);
 
-       mainLayout->setContentsMargins(5,5,5,5);
+       mainLayout->setContentsMargins(200,100,200,100);
        mainLayout->addLayout(mainBox);
 
 
@@ -699,7 +710,8 @@ void MainWindow::timerEvent(QTimerEvent *e){
     updateLiveData();
     updateGraphicSerie();
 
-    if(rabbitWild.size() + wolfWild.size() > 100000){
+    if(rabbitWild.size() + wolfWild.size() > 100000 || rabbitWild.size() == 0){
+        startSimulation = false;
         killTimer(timerID);
         endSimulation();
         displayFinalWindow();
