@@ -32,6 +32,7 @@ class MainWindow : public QWidget {
 
     public slots:
         void clickInitParameters();
+        void downloadCsvFile ();
 
     protected:
        void paintEvent(QPaintEvent *);
@@ -46,6 +47,7 @@ class MainWindow : public QWidget {
         QImage wolfImage;
         QImage rabbitPicto;
         QImage wolfPicto;
+        QImage downloadPicto;
 
         QSpinBox *numberOfRabbit;
         QSpinBox *numberOfWolf;
@@ -84,6 +86,8 @@ class MainWindow : public QWidget {
         QVBoxLayout *newRabbitVBOX;
         QVBoxLayout *newWolfVBOX;
 
+        QString stringData;
+
 
         int timerID;
 
@@ -95,7 +99,7 @@ class MainWindow : public QWidget {
         int numberNewrabbit =0;
         int numberNewWolf =0;
 
-        qreal numberGeneration = -1;
+        qreal numberGeneration = -50;
 
         bool startSimulation;
 
@@ -121,6 +125,7 @@ class MainWindow : public QWidget {
         void updateGraphicSerie();
         void endSimulation();
         void displayFinalWindow();
+
 
 
 };

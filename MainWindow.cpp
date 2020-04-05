@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include <QPainter>
 #include <QTime>
 #include<QDebug>
@@ -13,6 +15,8 @@
 #include <QLineSeries>
 #include <QChartView>
 #include <QPieSeries>
+#include <QMessageBox>
+#include <QFileDialog>
 #include "MainWindow.h"
 #include "Animal.h"
 
@@ -45,6 +49,7 @@ void MainWindow::loadImage(){
     wolfImage.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf.png");
     wolfPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf_picto.png");
     rabbitPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\rabbit_picto.png");
+    downloadPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\download.png");
 
 }
 
@@ -54,6 +59,7 @@ void MainWindow::initParameterWindow(){
         //TODO MOVE THIS:
         rabbitSerie = new QLineSeries;
         wolfSerie = new QLineSeries;
+        stringData = "Time (ms),Rabbit population size,Wolf population size\n";
 
         setStyleSheet("background-color:#112233;");
         QFont spinBoxLabelFont("Tahoma", 11);
@@ -603,6 +609,9 @@ void MainWindow::updateGraphicSerie(){
     numberGeneration+=50;
     qreal yRabbit = rabbitWild.size();
     qreal yWolf = wolfWild.size();
+
+    stringData += QString::number(numberGeneration)+","+QString::number(yRabbit)+","+QString::number(yWolf)+"\n";
+
     rabbitSerie->append(numberGeneration,yRabbit);
     wolfSerie->append(numberGeneration,yWolf);
 }
@@ -610,8 +619,8 @@ void MainWindow::updateGraphicSerie(){
 void MainWindow::displayFinalWindow(){
 
     QFont titleChart("Tahoma", 22,Qt::white);
-    QHBoxLayout *mainBox = new QHBoxLayout;
-
+    QVBoxLayout *mainBox = new QVBoxLayout;
+    QHBoxLayout *buttonBox = new QHBoxLayout;
 
     QChart *chart = new QChart();
 
@@ -643,8 +652,52 @@ void MainWindow::displayFinalWindow(){
        chartView->setRenderHint(QPainter::Antialiasing);
        mainBox->addWidget(chartView);
 
-       mainLayout->setContentsMargins(200,100,200,100);
+       QPushButton *downloadData = new QPushButton("  Download data in csv format");
+       downloadData->setStyleSheet("QPushButton{"
+                                   "background-color: #fdfdfd;"
+                                   "border-style: outset;"
+                                   "border-width: 1px;"
+                                   "border-radius: 10px;"
+                                   "border-color: black;"
+                                   "font: 12px;"
+                                   "font-weight: bold;"
+                                   "padding: 6px;}"
+                               "QPushButton:hover{"
+                                   "background-color: #fcfcfc;"
+                                   "border-style: outset;"
+                                   "border-width: 2px;"
+                                   "border-radius: 10px;"
+                                   "border-color: black;"
+                                   "font: 12px;"
+                                   "font-weight: bold;"
+                                   "padding: 6px;}"
+                               );
+       downloadData->setIcon(QIcon("c:\\Users\\Ivan\\wildSimulation\\img\\download.png"));
+       QWidget::connect(downloadData,SIGNAL(clicked()),this,SLOT(downloadCsvFile()));
+
+       buttonBox->addWidget(downloadData);
+       buttonBox->setContentsMargins(450,0,450,0);
+
+       mainLayout->setContentsMargins(230,100,170,100);
        mainLayout->addLayout(mainBox);
+       mainLayout->addLayout(buttonBox);
+
+
+}
+
+void MainWindow::downloadCsvFile(){
+
+    QString fileNameQT = QFileDialog::getSaveFileName(this, "Save the csv", QString(), "csv (*.csv)");
+    std::string file_name_string = fileNameQT.toStdString();
+    std::string data_to_write = stringData.toStdString();
+
+    std::ofstream file(file_name_string.c_str());
+    std::string data(data_to_write);
+    file << data;
+    file.close();
+
+    startSimulation = false;
+    initParameterWindow();
 
 
 }
