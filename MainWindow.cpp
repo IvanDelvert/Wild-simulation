@@ -50,6 +50,7 @@ void MainWindow::loadImage(){
     wolfPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\wolf_picto.png");
     rabbitPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\rabbit_picto.png");
     downloadPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\download.png");
+    backPicto.load("c:\\Users\\Ivan\\wildSimulation\\img\\home.png");
 
 }
 
@@ -177,7 +178,7 @@ void MainWindow::initParameterWindow(){
         boutonLayout->addWidget(validate);
         boutonLayout->setContentsMargins(150,0,150,0);
 
-        mainLayout = new QVBoxLayout;
+        if(firstSimulation){mainLayout = new QVBoxLayout;}
         mainLayout->setContentsMargins(350,5,350,150);
         mainLayout->addLayout(titleLayout);
         mainLayout->addLayout(imageLayout);
@@ -185,9 +186,7 @@ void MainWindow::initParameterWindow(){
         mainLayout->addLayout(textSPinBoxLayout);
         mainLayout->addLayout(boutonLayout);
 
-        this->setLayout(mainLayout);
-
-
+        if(firstSimulation){this->setLayout(mainLayout);}
 
 }
 
@@ -619,8 +618,9 @@ void MainWindow::updateGraphicSerie(){
 void MainWindow::displayFinalWindow(){
 
     QFont titleChart("Tahoma", 22,Qt::white);
-    QVBoxLayout *mainBox = new QVBoxLayout;
-    QHBoxLayout *buttonBox = new QHBoxLayout;
+    mainBox = new QVBoxLayout;
+    buttonDownloadBox = new QHBoxLayout;
+    buttonBackBox = new QHBoxLayout;
 
     QChart *chart = new QChart();
 
@@ -675,13 +675,58 @@ void MainWindow::displayFinalWindow(){
        downloadData->setIcon(QIcon("c:\\Users\\Ivan\\wildSimulation\\img\\download.png"));
        QWidget::connect(downloadData,SIGNAL(clicked()),this,SLOT(downloadCsvFile()));
 
-       buttonBox->addWidget(downloadData);
-       buttonBox->setContentsMargins(450,0,450,0);
+      QPushButton *backButton = new QPushButton();
 
-       mainLayout->setContentsMargins(230,100,170,100);
+      backButton->setStyleSheet("QPushButton{"
+                                "background-color: #112233;"
+                                "border-style: outset;"
+                                "border-width: 1px;"
+                                "border-radius: 10px;"
+                                "border-color: #112233;"
+                                "}");
+
+
+      backButton->setIcon(QIcon("c:\\Users\\Ivan\\wildSimulation\\img\\home.png"));
+      QWidget::connect(backButton,SIGNAL(clicked()),this,SLOT(restartSimulation()));
+      buttonBackBox->addWidget(backButton);
+
+
+       buttonDownloadBox->addWidget(downloadData);
+
+       buttonBackBox->setContentsMargins(0,0,1550,0);
+       buttonDownloadBox->setContentsMargins(630,0,670,50);
+       mainBox->setContentsMargins(200,100,170,100);
+       mainLayout->setContentsMargins(5,5,5,5);
+
+
+       mainLayout->addLayout(buttonBackBox);
        mainLayout->addLayout(mainBox);
-       mainLayout->addLayout(buttonBox);
+       mainLayout->addLayout(buttonDownloadBox);
 
+
+}
+
+void MainWindow::restartSimulation(){
+    buttonBackBox->setContentsMargins(0,0,0,0);
+    buttonDownloadBox->setContentsMargins(0,0,0,0);
+    mainBox->setContentsMargins(0,0,0,0);
+    clearLayout(buttonBackBox);
+    clearLayout(mainBox);
+    clearLayout(buttonDownloadBox);
+
+    startSimulation = false;
+    firstSimulation = false;
+
+    numberDeadRabbit = 0;
+    numberDeadWolf = 0;
+    numberNewrabbit =0;
+    numberNewWolf =0;
+
+    //Reset for the download of data
+    numberGeneration = -50;
+
+    mainLayout->setContentsMargins(0,0,0,0);
+    initParameterWindow();
 
 }
 
@@ -695,10 +740,6 @@ void MainWindow::downloadCsvFile(){
     std::string data(data_to_write);
     file << data;
     file.close();
-
-    startSimulation = false;
-    initParameterWindow();
-
 
 }
 
@@ -743,8 +784,6 @@ void MainWindow::paintEvent(QPaintEvent *e){
             qp.drawImage(wolfWild[i].X_pos,wolfWild[i].Y_pos,wolfWild[i].animalImage);
         }
     }
-
-
 
 }
 
