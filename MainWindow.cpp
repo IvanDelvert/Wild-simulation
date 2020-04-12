@@ -139,6 +139,7 @@ void MainWindow::initParameterWindow(){
                                     "border-radius: 10px;"
                                     "border-color: black;"
                                     "font: 12px;"
+                                    "font-weight: bold;"
                                     "padding: 6px;}"
                                 "QPushButton:hover{"
                                     "background-color: #fcfcfc;"
@@ -147,6 +148,7 @@ void MainWindow::initParameterWindow(){
                                     "border-radius: 10px;"
                                     "border-color: black;"
                                     "font: 12px;"
+                                    "font-weight: bold;"
                                     "padding: 6px;}"
                                 );
 
@@ -159,6 +161,7 @@ void MainWindow::initParameterWindow(){
                             "border-radius: 10px;"
                             "border-color: black;"
                             "font: 12px;"
+                            "font-weight: bold;"
                             "padding: 6px;}"
                         "QPushButton:hover{"
                             "background-color: #fcfcfc;"
@@ -167,11 +170,12 @@ void MainWindow::initParameterWindow(){
                             "border-radius: 10px;"
                             "border-color: black;"
                             "font: 12px;"
+                            "font-weight: bold;"
                             "padding: 6px;}"
                         );
 
 
-        QWidget::connect(quit,SIGNAL(clicked()),this,SLOT(quit()));
+        QWidget::connect(quit,SIGNAL(clicked()),this,SLOT(close()));
         QWidget::connect(validate,SIGNAL(clicked()),this,SLOT(clickInitParameters()));
 
         boutonLayout->addWidget(quit);
@@ -367,15 +371,46 @@ void MainWindow::initLiveDataWindow(){
       gridLayout->addLayout(newWolfVBOX,1,1,1,1);
      //QHBoxLayout *deadWolf = new QHBoxLayout;
 
+      stopSimulationBox = new QHBoxLayout;
+      QPushButton *simulationButton = new QPushButton("Stop the simulation");
+      simulationButton->setStyleSheet("QPushButton{"
+                                      "background-color: #fdfdfd;"
+                                      "border-style: outset;"
+                                      "border-width: 1px;"
+                                      "border-radius: 10px;"
+                                      "border-color: black;"
+                                      "font: 12px;"
+                                      "font-weight: bold;"
+                                      "padding: 6px;}"
+                                  "QPushButton:hover{"
+                                      "background-color: #fcfcfc;"
+                                      "border-style: outset;"
+                                      "border-width: 1px;"
+                                      "border-radius: 10px;"
+                                      "border-color: black;"
+                                      "font: 12px;"
+                                      "font-weight: bold;"
+                                      "padding: 6px;}"
+                                  );
+
+     QWidget::connect(simulationButton,SIGNAL(clicked()),this,SLOT(endSimulationSLOT()));
+
+     stopSimulationBox->setContentsMargins(50,0,50,5);
+     stopSimulationBox->addWidget(simulationButton);
 
      mainLayout->addLayout(boxTitle);
      mainLayout->addLayout(boxGraphic);
      mainLayout->addLayout(gridLayout);
-
-
-
+     mainLayout->addLayout(stopSimulationBox);
 
 }
+
+
+void MainWindow::endSimulationSLOT(){
+
+    clickOnEndSimulation = true;
+}
+
 
 //TODO improve this method
 //TODO Change name method
@@ -499,7 +534,7 @@ void MainWindow::wolfReproduction(int n){
 void MainWindow::wolfEatRabbit(QVector<Animal> w){
     int wolf =0;
     int rabbit =0;
-    int currentKill =0;
+    //int currentKill =0;
     QVector<Animal>::iterator it;
     for(it = w.begin();it != w.end();it++){
         if(it->type ==0){rabbit++;}
@@ -598,9 +633,9 @@ void MainWindow::endSimulation(){
     clearLayout(deadWolfVBOX);
     clearLayout(newRabbitVBOX);
     clearLayout(newWolfVBOX);
+    clearLayout(stopSimulationBox);
     gridLayout->deleteLater();
-    rabbitWild.clear();
-    wolfWild.clear();
+
 }
 
 void MainWindow::updateGraphicSerie(){
@@ -635,6 +670,7 @@ void MainWindow::displayFinalWindow(){
        chart->addSeries(wolfSerie);
        chart->createDefaultAxes();
        chart->axes(Qt::Vertical).first()->setMin(0);
+       chart->axes(Qt::Vertical).first()->setMax(1.05*qMax(rabbitWild.size(),wolfWild.size()));
        chart->axes(Qt::Vertical).first()->setLabelsColor(Qt::white);
        chart->axes(Qt::Vertical).first()->setTitleText("Size of the population");
        chart->axes(Qt::Vertical).first()->setTitleBrush(Qt::white);
@@ -675,34 +711,52 @@ void MainWindow::displayFinalWindow(){
        downloadData->setIcon(QIcon("c:\\Users\\Ivan\\wildSimulation\\img\\download.png"));
        QWidget::connect(downloadData,SIGNAL(clicked()),this,SLOT(downloadCsvFile()));
 
-      QPushButton *backButton = new QPushButton();
+       QLabel *returnLabel = new QLabel;
+       returnLabel->setPixmap(QPixmap::fromImage(backPicto));
 
-      backButton->setStyleSheet("QPushButton{"
+
+      QPushButton *backButton = new QPushButton();
+      backButton->setStyleSheet(
+                                "QPushButton{"
                                 "background-color: #112233;"
                                 "border-style: outset;"
-                                "border-width: 1px;"
+                                "border-width: 0px;"
                                 "border-radius: 10px;"
                                 "border-color: #112233;"
                                 "}");
 
 
-      backButton->setIcon(QIcon("c:\\Users\\Ivan\\wildSimulation\\img\\home.png"));
-      QWidget::connect(backButton,SIGNAL(clicked()),this,SLOT(restartSimulation()));
+      //backButton->setIcon(QIcon("c:\\Users\\Ivan\\wildSimulation\\img\\home.png"));
+      QPixmap bgPixmap("c:\\Users\\Ivan\\wildSimulation\\img\\home.png");
+      QPixmap scaled = bgPixmap.scaled( QSize(256, 256), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+      QIcon icon(scaled);
+      backButton->setIcon(icon);
+      backButton->setIconSize(QSize(32,32));
+
       buttonBackBox->addWidget(backButton);
+      QWidget::connect(backButton,SIGNAL(clicked()),this,SLOT(restartSimulation()));
 
-
+       /*
+      buttonBackBox->addWidget(returnLabel);
+      QWidget::connect(returnLabel,SIGNAL(clicked()),this,SLOT(restartSimulation()));
+*/
        buttonDownloadBox->addWidget(downloadData);
 
-       buttonBackBox->setContentsMargins(0,0,1550,0);
+       mainLayout->setContentsMargins(5,5,5,5);
+       buttonBackBox->setContentsMargins(0,0,1560,0);
+
        buttonDownloadBox->setContentsMargins(630,0,670,50);
        mainBox->setContentsMargins(200,100,170,100);
-       mainLayout->setContentsMargins(5,5,5,5);
+
 
 
        mainLayout->addLayout(buttonBackBox);
        mainLayout->addLayout(mainBox);
        mainLayout->addLayout(buttonDownloadBox);
 
+       //Clear the list
+       rabbitWild.clear();
+       wolfWild.clear();
 
 }
 
@@ -716,6 +770,7 @@ void MainWindow::restartSimulation(){
 
     startSimulation = false;
     firstSimulation = false;
+    clickOnEndSimulation = false;
 
     numberDeadRabbit = 0;
     numberDeadWolf = 0;
@@ -762,6 +817,19 @@ void MainWindow::updateLiveData(){
 }
 
 
+bool MainWindow::endSimulationFlag(){
+    bool res = false;
+    double rSize = rabbitWild.size();
+    double wSize = wolfWild.size();
+    if(rSize + wSize >60000 || rSize + wSize == 0 || clickOnEndSimulation == true){
+            res = true;
+  }
+
+  return res;
+}
+
+
+
 
 /*
  * Event that perform the display of each species
@@ -802,7 +870,7 @@ void MainWindow::timerEvent(QTimerEvent *e){
     updateLiveData();
     updateGraphicSerie();
 
-    if(rabbitWild.size() + wolfWild.size() > 100000 || rabbitWild.size() == 0){
+    if(endSimulationFlag()){
         startSimulation = false;
         killTimer(timerID);
         endSimulation();

@@ -16,6 +16,8 @@
 #include <QPieSeries>
 #include "Animal.h"
 
+#pragma once
+
 using namespace QtCharts;
 
 class MainWindow : public QWidget {
@@ -32,13 +34,14 @@ class MainWindow : public QWidget {
 
     public slots:
         void clickInitParameters();
+        void endSimulationSLOT();
         void downloadCsvFile ();
         void restartSimulation();
 
     protected:
        void paintEvent(QPaintEvent *);
        void timerEvent(QTimerEvent *);
-       //void keyPressEvent(QKeyEvent *);
+       void keyPressEvent(QEvent *);
 
 
     private:
@@ -96,6 +99,10 @@ class MainWindow : public QWidget {
         QHBoxLayout *buttonBackBox;
 
 
+        //Button on the simulation page
+        QHBoxLayout *stopSimulationBox;
+
+
         int timerID;
 
         int numberRabbit;
@@ -110,6 +117,7 @@ class MainWindow : public QWidget {
 
         bool startSimulation;
         bool firstSimulation = true;
+        bool clickOnEndSimulation = false;
 
         QVector<Rabbit> rabbitWild;
         QVector<Wolf> wolfWild;
@@ -133,7 +141,7 @@ class MainWindow : public QWidget {
         void updateGraphicSerie();
         void endSimulation();
         void displayFinalWindow();
-
+        bool endSimulationFlag();
 
 
 };
