@@ -242,6 +242,7 @@ void MainWindow::clickInitParameters(){
 //TODO UPDATE THE NUMBER OF DEAD RABBIT WITH NATURAL DEATH
 void MainWindow::initLiveDataWindow(){
     mainLayout->setContentsMargins(1202,5,0,0);
+    firstPage = false;
 
     QFont titleFont("MS Sans Serif", 14, QFont::Bold);
     QFont dataTextFont("Tahoma", 10);
@@ -771,6 +772,7 @@ void MainWindow::restartSimulation(){
     startSimulation = false;
     firstSimulation = false;
     clickOnEndSimulation = false;
+    firstPage = true;
 
     numberDeadRabbit = 0;
     numberDeadWolf = 0;
@@ -829,6 +831,17 @@ bool MainWindow::endSimulationFlag(){
 }
 
 
+
+void MainWindow::keyPressEvent(QKeyEvent *e){
+
+    int k = e->key();
+    qInfo()<<firstPage<<endl;
+    if((k == Qt::Key_Enter) && (firstPage == true)){
+        qInfo()<<"ENTER"<<endl;
+    }
+
+    QWidget::keyPressEvent(e);
+}
 
 
 /*

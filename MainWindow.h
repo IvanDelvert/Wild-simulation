@@ -41,7 +41,7 @@ class MainWindow : public QWidget {
     protected:
        void paintEvent(QPaintEvent *);
        void timerEvent(QTimerEvent *);
-       void keyPressEvent(QEvent *);
+       void keyPressEvent(QKeyEvent *);
 
 
     private:
@@ -118,6 +118,7 @@ class MainWindow : public QWidget {
         bool startSimulation;
         bool firstSimulation = true;
         bool clickOnEndSimulation = false;
+        bool firstPage = true;
 
         QVector<Rabbit> rabbitWild;
         QVector<Wolf> wolfWild;
