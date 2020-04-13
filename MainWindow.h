@@ -33,7 +33,7 @@ class MainWindow : public QWidget {
         static const int HIGHT = 800;
 
     public slots:
-        void clickInitParameters();
+        void clickInitParametersSLOT();
         void endSimulationSLOT();
         void downloadCsvFile ();
         void restartSimulation();

@@ -176,7 +176,7 @@ void MainWindow::initParameterWindow(){
 
 
         QWidget::connect(quit,SIGNAL(clicked()),this,SLOT(close()));
-        QWidget::connect(validate,SIGNAL(clicked()),this,SLOT(clickInitParameters()));
+        QWidget::connect(validate,SIGNAL(clicked()),this,SLOT(clickInitParametersSLOT()));
 
         boutonLayout->addWidget(quit);
         boutonLayout->addWidget(validate);
@@ -215,7 +215,7 @@ void MainWindow::clearLayout(QLayout *layout){
 /*
  * SLOT after the click on the "OK" button. Initialisation of the number of species
  * */
-void MainWindow::clickInitParameters(){
+void MainWindow::clickInitParametersSLOT(){
 
     numberRabbit = numberOfRabbit->value();
     numberWolf = numberOfWolf->value();
@@ -671,7 +671,7 @@ void MainWindow::displayFinalWindow(){
        chart->addSeries(wolfSerie);
        chart->createDefaultAxes();
        chart->axes(Qt::Vertical).first()->setMin(0);
-       chart->axes(Qt::Vertical).first()->setMax(1.05*qMax(rabbitWild.size(),wolfWild.size()));
+       //chart->axes(Qt::Vertical).first()->setMax(1.05*qMax(rabbitWild.size(),wolfWild.size()));
        chart->axes(Qt::Vertical).first()->setLabelsColor(Qt::white);
        chart->axes(Qt::Vertical).first()->setTitleText("Size of the population");
        chart->axes(Qt::Vertical).first()->setTitleBrush(Qt::white);
@@ -835,9 +835,13 @@ bool MainWindow::endSimulationFlag(){
 void MainWindow::keyPressEvent(QKeyEvent *e){
 
     int k = e->key();
-    qInfo()<<firstPage<<endl;
-    if((k == Qt::Key_Enter) && (firstPage == true)){
+    qInfo()<<firstPage<<"k: "<<k<<endl;
+
+    //k == 16777220 is for the "main" enter key
+    if(((k == Qt::Key_Enter) || (k == 16777220)) && (firstPage == true)){
         qInfo()<<"ENTER"<<endl;
+        clickInitParametersSLOT();
+
     }
 
     QWidget::keyPressEvent(e);
